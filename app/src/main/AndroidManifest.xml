@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wrapify.wordlier">
+    package="com.wreckingball.wordlier">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Wordlier">
         <activity
-            android:name=".MainActivity"
+            android:name="com.wreckingball.wordlier.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Wordlier">

@@ -1,4 +1,4 @@
-package com.wrapify.wordlier.ui.theme
+package com.wreckingball.wordlier.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

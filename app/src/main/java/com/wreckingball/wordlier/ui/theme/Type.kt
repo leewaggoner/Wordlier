@@ -1,4 +1,4 @@
-package com.wrapify.wordlier.ui.theme
+package com.wreckingball.wordlier.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
