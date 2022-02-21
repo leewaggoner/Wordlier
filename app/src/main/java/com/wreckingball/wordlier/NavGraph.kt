@@ -1,7 +1,6 @@
 package com.wreckingball.wordlier
 
 import androidx.navigation.NavController
-import com.wreckingball.wordlier.ui.home.Home
 
 object Destinations {
     const val Login = "login"
