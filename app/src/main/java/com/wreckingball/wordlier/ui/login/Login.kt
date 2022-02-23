@@ -20,19 +20,19 @@ import androidx.compose.ui.platform.LocalContext
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import org.koin.androidx.compose.get
+import org.koin.androidx.compose.viewModel
 
 @Composable
 
 fun Login(goHome: () -> Unit) {
+    val viewModel: LoginViewModel by viewModel()
     val context = LocalContext.current
     var name by rememberSaveable { mutableStateOf("") }
-    val playerRepo = get<PlayerRepo>()
 
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Text(
             text = context.getString(R.string.app_name),
@@ -43,7 +43,8 @@ fun Login(goHome: () -> Unit) {
             name = name,
             goHome = goHome,
             onNameChange = { name = it },
-            playerRepo = playerRepo)
+            saveName = { viewModel.setPlayerName(it) }
+        )
     }
 }
 
@@ -53,7 +54,7 @@ private fun LoginFields(
     name: String,
     goHome: () -> Unit,
     onNameChange: (String) -> Unit,
-    playerRepo: PlayerRepo
+    saveName: (String) ->Unit
 ) {
     OutlinedTextField(
         value = name,
@@ -63,9 +64,9 @@ private fun LoginFields(
     )
     Button(onClick = {
         if (name.isBlank()) {
-            Toast.makeText(context, context.getText(R.string.player_name_error), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getText(R.string.player_name_error), Toast.LENGTH_LONG).show()
         } else {
-            playerRepo.setPlayerName(name)
+            saveName(name)
             goHome()
         }
     }) {

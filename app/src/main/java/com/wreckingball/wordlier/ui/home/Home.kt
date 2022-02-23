@@ -9,17 +9,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import org.koin.androidx.compose.viewModel
 
 @Composable
 @Preview
 fun Home() {
+    val viewModel: HomeViewModel by viewModel()
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Text(text = "Home Page",
+        Text(text = "Welcome ${viewModel.getPlayerName()}",
             style = MaterialTheme.typography.h4
         )
     }
