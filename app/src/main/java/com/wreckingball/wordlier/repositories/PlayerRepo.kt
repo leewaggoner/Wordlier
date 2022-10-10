@@ -1,19 +1,18 @@
 package com.wreckingball.wordlier.repositories
 
-import android.content.Context
-import com.wreckingball.wordlier.R
+import com.wreckingball.wordlier.models.PlayerData
+import com.wreckingball.wordlier.utils.PreferencesWrapper
 
-private const val REPO_NAME = "com.wreckingball.wordlier"
 private const val PLAYER_NAME_TAG = "PlayerName"
 
-class PlayerRepo(private val context: Context) {
-    private val prefs = context.getSharedPreferences(REPO_NAME, Context.MODE_PRIVATE)
-    fun setPlayerName(name: String) {
-        prefs.edit().putString(PLAYER_NAME_TAG, name).apply()
+class PlayerRepo(
+    private val preferencesWrapper: PreferencesWrapper
+    ) {
+    fun setPlayerData(playerData: PlayerData) {
+        preferencesWrapper.putString(PLAYER_NAME_TAG, playerData.name)
     }
 
-    fun getPlayerName() : String {
-        val default = context.getString(R.string.player_name_unknown)
-        return prefs.getString(PLAYER_NAME_TAG, default) ?: default
+    fun getPlayerData() : PlayerData {
+        return PlayerData(preferencesWrapper.getString(PLAYER_NAME_TAG, ""))
     }
 }

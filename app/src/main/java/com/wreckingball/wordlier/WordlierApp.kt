@@ -8,27 +8,24 @@ import androidx.navigation.compose.rememberNavController
 import com.wreckingball.wordlier.ui.home.Home
 import com.wreckingball.wordlier.ui.login.Login
 import com.wreckingball.wordlier.ui.login.LoginViewModel
-import com.wreckingball.wordlier.ui.theme.WordlierTheme
 import org.koin.androidx.compose.viewModel
 
 @Composable
 fun WordlierApp() {
     val navController = rememberNavController()
     val actions = remember(navController) { Actions(navController) }
-    val viewModel: LoginViewModel by viewModel()
 
-    WordlierTheme {
-        var startDestination = Destinations.Login
-        if (viewModel.goToGame) {
-            startDestination = Destinations.Home
+    val startDestination = Destinations.Login
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable(Destinations.Login) {
+            val viewModel: LoginViewModel by viewModel()
+            Login(
+                viewModel,
+                actions,
+            )
         }
-        NavHost(navController = navController, startDestination = startDestination) {
-            composable(Destinations.Login) {
-                Login(goHome = actions.navigateToHome)
-            }
-            composable(Destinations.Home) {
-                Home()
-            }
+        composable(Destinations.Home) {
+            Home()
         }
     }
 }
