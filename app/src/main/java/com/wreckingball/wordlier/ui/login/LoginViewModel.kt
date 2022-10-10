@@ -4,11 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.wreckingball.wordlier.compose.OneShotEvent
-import com.wreckingball.wordlier.compose.toEvent
 import com.wreckingball.wordlier.models.PlayerData
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.login.model.LoginState
+import com.wreckingball.wordlier.utils.OneShotEvent
+import com.wreckingball.wordlier.utils.toEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {

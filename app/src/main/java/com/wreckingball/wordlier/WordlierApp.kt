@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.wreckingball.wordlier.ui.home.Home
+import com.wreckingball.wordlier.ui.home.HomeViewModel
 import com.wreckingball.wordlier.ui.login.Login
 import com.wreckingball.wordlier.ui.login.LoginViewModel
 import org.koin.androidx.compose.viewModel
@@ -25,7 +26,8 @@ fun WordlierApp() {
             )
         }
         composable(Destinations.Home) {
-            Home()
+            val viewModel: HomeViewModel by viewModel()
+            Home(viewModel)
         }
     }
 }

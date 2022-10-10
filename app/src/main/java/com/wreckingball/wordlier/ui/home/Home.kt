@@ -12,18 +12,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.koin.androidx.compose.viewModel
 
 @Composable
-@Preview
-fun Home() {
-    val viewModel: HomeViewModel by viewModel()
+fun Home(
+    viewModel: HomeViewModel
+) {
+    HomeContent(
+        name = viewModel.getPlayerName()
+    )
+}
 
+@Composable
+fun HomeContent(
+    name: String
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Text(text = "Welcome ${viewModel.getPlayerName()}",
+        Text(
+            text = "Welcome",
+            style = MaterialTheme.typography.h3
+        )
+        Text(
+            text = name,
             style = MaterialTheme.typography.h4
         )
     }
+}
+
+@Preview(name = "Home Content")
+@Composable
+fun HomeContentPreview() {
+    HomeContent(
+        name = "Lee J Waggoner"
+    )
 }

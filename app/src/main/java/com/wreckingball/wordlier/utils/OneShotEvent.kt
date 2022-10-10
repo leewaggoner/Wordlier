@@ -1,4 +1,4 @@
-package com.wreckingball.wordlier.compose
+package com.wreckingball.wordlier.utils
 
 import androidx.annotation.VisibleForTesting
 
