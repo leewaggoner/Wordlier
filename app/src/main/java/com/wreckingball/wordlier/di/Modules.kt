@@ -3,7 +3,7 @@ package com.wreckingball.wordlier.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.wreckingball.wordlier.repositories.PlayerRepo
-import com.wreckingball.wordlier.ui.home.HomeViewModel
+import com.wreckingball.wordlier.ui.game.GameViewModel
 import com.wreckingball.wordlier.ui.login.LoginViewModel
 import com.wreckingball.wordlier.utils.PreferencesWrapper
 import org.koin.android.ext.koin.androidContext
@@ -14,7 +14,7 @@ private const val REPO_NAME = "com.wreckingball.wordlier"
 
 val appModule = module() {
     viewModel { LoginViewModel(playerRepo = get()) }
-    viewModel { HomeViewModel(playerRepo = get()) }
+    viewModel { GameViewModel(playerRepo = get()) }
 
     single { PlayerRepo( preferencesWrapper = get()) }
     single { PreferencesWrapper(getSharedPrefs(androidContext())) }
