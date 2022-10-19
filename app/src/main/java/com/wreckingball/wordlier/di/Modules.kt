@@ -2,6 +2,8 @@ package com.wreckingball.wordlier.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.wreckingball.wordlier.models.GameCursor
+import com.wreckingball.wordlier.models.GamePlay
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.game.GameViewModel
 import com.wreckingball.wordlier.ui.login.LoginViewModel
@@ -14,10 +16,12 @@ private const val REPO_NAME = "com.wreckingball.wordlier"
 
 val appModule = module() {
     viewModel { LoginViewModel(playerRepo = get()) }
-    viewModel { GameViewModel(playerRepo = get()) }
+    viewModel { GameViewModel(gamePlay = get()) }
 
     single { PlayerRepo( preferencesWrapper = get()) }
     single { PreferencesWrapper(getSharedPrefs(androidContext())) }
+    single { GamePlay(cursor = get()) }
+    single { GameCursor() }
 }
 
 private fun getSharedPrefs(context: Context) : SharedPreferences {

@@ -23,7 +23,7 @@ fun WordRow(
         horizontalArrangement = Arrangement.Center,
     ) {
         for ((index, character) in guess.withIndex()) {
-            CharacterCell(letter = character/*, modifier = Modifier.weight(1f)*/)
+            CharacterCell(letter = character)
             if (index < guess.size - 1) {
                 Spacer(modifier = Modifier.width(8.dp))
             }

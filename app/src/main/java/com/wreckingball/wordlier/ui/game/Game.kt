@@ -17,9 +17,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.R
+import com.wreckingball.wordlier.models.GameCursor
+import com.wreckingball.wordlier.models.GamePlay
 import com.wreckingball.wordlier.models.GameState
-import com.wreckingball.wordlier.models.GameplayState
 import com.wreckingball.wordlier.ui.compose.GameBoard
+import com.wreckingball.wordlier.ui.compose.Keyboard
 import com.wreckingball.wordlier.ui.theme.Purple500
 import com.wreckingball.wordlier.ui.theme.Teal200
 import com.wreckingball.wordlier.ui.theme.Typography
@@ -29,13 +31,15 @@ fun Game(
     viewModel: GameViewModel
 ) {
     GameContent(
-        state = viewModel.gameState
+        state = viewModel.state,
+        onKeyboardClick = viewModel::onKeyboardClick
     )
 }
 
 @Composable
 fun GameContent(
-    state: GameState
+    state: GameState,
+    onKeyboardClick: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -59,7 +63,10 @@ fun GameContent(
             GameBoard(
                 modifier = Modifier
                     .padding(top = 32.dp),
-                guesses = state.board.guesses
+                guesses = state.board
+            )
+            Keyboard(
+                onClick = onKeyboardClick
             )
         }
     }
@@ -69,6 +76,7 @@ fun GameContent(
 @Composable
 fun HomeContentPreview() {
     GameContent(
-        state = GameState(state = GameplayState.START_ROUND)
+        state = GameState(GamePlay(GameCursor()).board),
+        onKeyboardClick = { },
     )
 }

@@ -2,6 +2,7 @@ package com.wreckingball.wordlier.ui.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,11 +22,14 @@ fun CharacterCell(
     letter: String,
     modifier: Modifier = Modifier,
     color: Color = Color.White,
+    cellSize: Int = 50,
+    letterSize: Int = 36,
+    onClick: ((String) -> Unit)? = null
 ) {
     Box(
         modifier = modifier.then(
             Modifier
-                .size(50.dp, 50.dp)
+                .size(cellSize.dp, cellSize.dp)
                 .border(
                     width = 1.dp,
                     color = Color.Black,
@@ -34,13 +38,18 @@ fun CharacterCell(
                 .clip(RoundedCornerShape(12.dp))
                 .background(
                     color = color,
-                ),
+                )
+                .clickable {
+                    onClick?.let {
+                        onClick(letter)
+                    }
+                },
         ),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = letter,
-            fontSize = 36.sp,
+            fontSize = letterSize.sp,
             fontWeight = FontWeight.Bold,
         )
     }
