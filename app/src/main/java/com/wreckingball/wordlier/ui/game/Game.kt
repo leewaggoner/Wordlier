@@ -62,10 +62,14 @@ fun GameContent(
             )
             GameBoard(
                 modifier = Modifier
-                    .padding(top = 32.dp),
+                    .padding(top = 32.dp)
+                    .fillMaxWidth(),
                 guesses = state.board
             )
             Keyboard(
+                modifier = Modifier
+                    .padding(top = 32.dp)
+                    .fillMaxWidth(),
                 onClick = onKeyboardClick
             )
         }

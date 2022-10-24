@@ -6,25 +6,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.wreckingball.wordlier.R
 
 @Composable
-fun CharacterCell(
-    letter: String,
+fun IconCell(
+    icon: Painter,
+    command: String,
     modifier: Modifier = Modifier,
+    cellHeight: Int = 32,
+    cellWidth: Int = 42,
+    iconHeight: Int = 22,
+    iconWidth: Int = 32,
     color: Color = Color.White,
-    cellHeight: Int = 50,
-    cellWidth: Int = cellHeight,
-    letterSize: Int = 36,
     onClick: ((String) -> Unit)? = null
 ) {
     Box(
@@ -42,25 +45,25 @@ fun CharacterCell(
                 )
                 .clickable {
                     onClick?.let {
-                        onClick(letter)
+                        onClick(command)
                     }
                 },
         ),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = letter,
-            fontSize = letterSize.sp,
-            fontWeight = FontWeight.Bold,
+        Icon(
+            painter = icon,
+            contentDescription = "delete",
+            modifier = Modifier.size(width = iconWidth.dp, height = iconHeight.dp),
         )
     }
 }
 
 @Preview
 @Composable
-fun CharacterCellPreview() {
-    CharacterCell(
-        letter = "W",
-        color = Color.Green
+fun IconCellPreview() {
+    IconCell(
+        icon = painterResource(id = R.drawable.ic_delete),
+        command = "",
     )
 }
