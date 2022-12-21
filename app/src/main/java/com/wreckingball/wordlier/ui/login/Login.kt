@@ -24,18 +24,16 @@ fun Login(
     viewModel: LoginViewModel,
     actions: Actions,
 ) {
-    val navigation = viewModel.navigation.collectAsStateWithLifecycle()
+    val navigation = viewModel.navigation.collectAsStateWithLifecycle(null)
     navigation.value?.let { event ->
         event.consume { navigation ->
             when (navigation) {
                 LoginNavigation.GoToHome -> {
-                    actions.navigateToHome()
+                    actions.navigateToGame()
                 }
             }
         }
     }
-
-    viewModel.verifyLogin()
 
     LoginContent(
         screenState = viewModel.state,

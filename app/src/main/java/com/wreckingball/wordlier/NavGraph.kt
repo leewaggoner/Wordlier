@@ -4,11 +4,11 @@ import androidx.navigation.NavController
 
 object Destinations {
     const val Login = "login"
-    const val Home = "home"
+    const val Game = "game"
 }
 
 class Actions(navController: NavController) {
-    val navigateToHome: () -> Unit = {
-        navController.navigate(Destinations.Home)
+    val navigateToGame: () -> Unit = {
+        navController.navigate(Destinations.Game)
     }
 }

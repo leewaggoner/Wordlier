@@ -14,7 +14,7 @@ import org.koin.dsl.module
 
 private const val REPO_NAME = "com.wreckingball.wordlier"
 
-val appModule = module() {
+val appModule = module {
     viewModel { LoginViewModel(playerRepo = get()) }
     viewModel { GameViewModel(gamePlay = get()) }
 

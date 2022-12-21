@@ -25,7 +25,7 @@ fun WordlierApp() {
                 actions,
             )
         }
-        composable(Destinations.Home) {
+        composable(Destinations.Game) {
             val viewModel: GameViewModel by viewModel()
             Game(viewModel)
         }

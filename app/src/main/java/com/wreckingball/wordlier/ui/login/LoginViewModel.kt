@@ -4,25 +4,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.wreckingball.wordlier.models.PlayerData
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.login.model.LoginState
 import com.wreckingball.wordlier.utils.OneShotEvent
 import com.wreckingball.wordlier.utils.toEvent
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 
 class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
-    val navigation = MutableStateFlow<OneShotEvent<LoginNavigation>?>(null)
+    val navigation = MutableSharedFlow<OneShotEvent<LoginNavigation>?>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST,
+    )
     var state by mutableStateOf(LoginState())
 
     init {
         val name = playerRepo.getPlayerData().name
         state = state.copy(name = name, buttonEnabled = name.isNotEmpty())
+        verifyLogin()
     }
 
     fun verifyLogin() {
         if (state.name.isNotEmpty()) {
-            navigation.value = LoginNavigation.GoToHome.toEvent()
+            viewModelScope.launch(Dispatchers.Main) {
+                navigation.emit(LoginNavigation.GoToHome.toEvent())
+            }
         }
     }
 
@@ -32,6 +42,8 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
 
     fun setPlayerData(){
         playerRepo.setPlayerData(PlayerData(state.name))
-        navigation.value = LoginNavigation.GoToHome.toEvent()
+        viewModelScope.launch(Dispatchers.Main) {
+            navigation.emit(LoginNavigation.GoToHome.toEvent())
+        }
     }
 }
