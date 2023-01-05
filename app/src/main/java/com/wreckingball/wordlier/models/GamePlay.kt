@@ -1,27 +1,37 @@
 package com.wreckingball.wordlier.models
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.wreckingball.wordlier.repositories.GameRepo
 
 const val MAX_WORD_LENGTH = 5
 const val MAX_GUESSES = 6
 const val ENTER = "ENTER"
 const val BACK = "BACK"
 
-class GamePlay(
-    private val cursor: GameCursor,
-) {
+class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
     val board: SnapshotStateList<SnapshotStateList<String>> = mutableStateListOf()
-    private val word = "TRUST"
+    var resultUICallback: (GameResult) -> Unit = { }
+    private var word = "TRUST"
 
-    init {
-        for (i in 0 until MAX_GUESSES) {
-            board.add(getRow())
-        }
+    fun setupResultUICallback(callback: (GameResult) -> Unit) {
+        resultUICallback = callback
     }
 
-    private fun getRow(): SnapshotStateList<String> {
+    fun initializeGame() {
+        //initialize board
+        for (i in 0 until MAX_GUESSES) {
+            board.add(initRow())
+        }
+
+        //init game repo
+        gameRepo.initWords()
+
+        //get daily word
+        word = gameRepo.getDailyWord()
+    }
+
+    private fun initRow(): SnapshotStateList<String> {
         val row = mutableStateListOf<String>()
         for (i in 0 until MAX_WORD_LENGTH) {
             row.add("")
@@ -64,9 +74,18 @@ class GamePlay(
                 if (cursor.getRow() < MAX_GUESSES - 1) {
                     cursor.nextRow()
                 } else {
-                    Log.e("--LEE--", "You lost!")
+                    resultUICallback(GameResult.LOSS)
                 }
+            } else {
+                resultUICallback(GameResult.WIN)
             }
+        }
+    }
+
+    companion object {
+        enum class GameResult {
+            WIN,
+            LOSS
         }
     }
 }

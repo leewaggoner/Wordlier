@@ -20,6 +20,7 @@ import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.models.GameCursor
 import com.wreckingball.wordlier.models.GamePlay
 import com.wreckingball.wordlier.models.GameState
+import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.ui.compose.GameBoard
 import com.wreckingball.wordlier.ui.compose.Keyboard
 import com.wreckingball.wordlier.ui.theme.Purple500
@@ -80,7 +81,7 @@ fun GameContent(
 @Composable
 fun HomeContentPreview() {
     GameContent(
-        state = GameState(GamePlay(GameCursor()).board),
+        state = GameState(GamePlay(GameCursor(), GameRepo()).board),
         onKeyboardClick = { },
     )
 }

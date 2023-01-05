@@ -23,17 +23,12 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     var state by mutableStateOf(LoginState())
 
     init {
-        val name = playerRepo.getPlayerData().name
-        state = state.copy(name = name, buttonEnabled = name.isNotEmpty())
-        verifyLogin()
+        loadName()
     }
 
-    fun verifyLogin() {
-        if (state.name.isNotEmpty()) {
-            viewModelScope.launch(Dispatchers.Main) {
-                navigation.emit(LoginNavigation.GoToHome.toEvent())
-            }
-        }
+    private fun loadName() {
+        val name = playerRepo.getPlayerData().name
+        state = state.copy(name = name, buttonEnabled = name.isNotEmpty())
     }
 
     fun onNameChange(newName: String) {

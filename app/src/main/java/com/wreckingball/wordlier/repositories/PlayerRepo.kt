@@ -5,9 +5,7 @@ import com.wreckingball.wordlier.utils.PreferencesWrapper
 
 private const val PLAYER_NAME_TAG = "PlayerName"
 
-class PlayerRepo(
-    private val preferencesWrapper: PreferencesWrapper
-    ) {
+class PlayerRepo(private val preferencesWrapper: PreferencesWrapper) {
     fun setPlayerData(playerData: PlayerData) {
         preferencesWrapper.putString(PLAYER_NAME_TAG, playerData.name)
     }
