@@ -17,12 +17,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingball.wordlier.Actions
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.ui.login.model.LoginState
+import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun Login(
-    viewModel: LoginViewModel,
     actions: Actions,
+    viewModel: LoginViewModel = getViewModel(),
 ) {
     val navigation = viewModel.navigation.collectAsStateWithLifecycle(null)
     navigation.value?.let { event ->

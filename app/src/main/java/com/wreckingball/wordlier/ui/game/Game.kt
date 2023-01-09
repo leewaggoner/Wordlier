@@ -26,10 +26,11 @@ import com.wreckingball.wordlier.ui.compose.Keyboard
 import com.wreckingball.wordlier.ui.theme.Purple500
 import com.wreckingball.wordlier.ui.theme.Teal200
 import com.wreckingball.wordlier.ui.theme.Typography
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun Game(
-    viewModel: GameViewModel
+    viewModel: GameViewModel = getViewModel()
 ) {
     GameContent(
         state = viewModel.state,
