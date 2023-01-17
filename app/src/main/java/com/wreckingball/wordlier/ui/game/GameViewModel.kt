@@ -13,11 +13,17 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
 
     init {
         gamePlay.initializeGame()
-        gamePlay.setupResultUICallback { result ->
+        gamePlay.setupGameResultUICallback { result ->
             when (result) {
                 GamePlay.Companion.GameResult.WIN -> handleWin()
                 GamePlay.Companion.GameResult.LOSS -> handleLoss()
             }
+        }
+        gamePlay.setupInvalidWordUICallback {
+            handleInvalidWord()
+        }
+        gamePlay.setupGuessResultUICallback { guess ->
+            handleGuessResult(guess)
         }
     }
 
@@ -27,6 +33,14 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
 
     private fun handleLoss() {
         Log.e("-----LEE-----", "You lost!")
+    }
+
+    private fun handleInvalidWord() {
+
+    }
+
+    private fun handleGuessResult(guess: List<Pair<String, GamePlay.Companion.GuessResult>>) {
+
     }
 
     fun onKeyboardClick(key: String) {

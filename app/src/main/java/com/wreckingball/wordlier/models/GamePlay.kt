@@ -11,11 +11,21 @@ const val BACK = "BACK"
 
 class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
     val board: SnapshotStateList<SnapshotStateList<String>> = mutableStateListOf()
-    var resultUICallback: (GameResult) -> Unit = { }
+    private var invalidWordUICallback: () -> Unit = { }
+    private var gameResultUICallback: (GameResult) -> Unit = { }
+    private var guessResultUICallback: (List<Pair<String, GuessResult>>) -> Unit = { }
     private var word = "TRUST"
 
-    fun setupResultUICallback(callback: (GameResult) -> Unit) {
-        resultUICallback = callback
+    fun setupGameResultUICallback(callback: (GameResult) -> Unit) {
+        gameResultUICallback = callback
+    }
+
+    fun setupInvalidWordUICallback(callback: () -> Unit) {
+        invalidWordUICallback = callback
+    }
+
+    fun setupGuessResultUICallback(callback: (List<Pair<String, GuessResult>>) -> Unit) {
+        guessResultUICallback = callback
     }
 
     fun initializeGame() {
@@ -69,20 +79,53 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
 
     private fun handleGuess() {
         val guess = board[cursor.getRow()].joinToString(separator = "")
+
+        //make sure the guessed word really is a word
+        if (!isValidWord()) {
+            invalidWordUICallback()
+            return
+        }
+
         if (guess.length == MAX_WORD_LENGTH) {
             if (guess != word) {
                 if (cursor.getRow() < MAX_GUESSES - 1) {
+                    colorLetters(guess)
                     cursor.nextRow()
                 } else {
-                    resultUICallback(GameResult.LOSS)
+                    gameResultUICallback(GameResult.LOSS)
                 }
             } else {
-                resultUICallback(GameResult.WIN)
+                gameResultUICallback(GameResult.WIN)
             }
         }
     }
 
+    private fun isValidWord() : Boolean {
+        //TODO: Check some word database
+        return true
+    }
+
+    private fun colorLetters(guess: String) {
+        val letterMap = mutableListOf<Pair<String, GuessResult>>()
+        for (index in word.indices) {
+            var letterColor = Pair(first = guess[index].toString(), GuessResult.WRONG_LETTER)
+            if (word.contains(guess[index].toString())) {
+                letterColor = letterColor.copy(second = GuessResult.WRONG_POSITION)
+            }
+            if (guess[index] == word[index]) {
+                letterColor = letterColor.copy(second = GuessResult.CORRECT)
+            }
+            letterMap.add(letterColor)
+        }
+        guessResultUICallback(letterMap)
+    }
+
     companion object {
+        enum class GuessResult {
+            CORRECT,
+            WRONG_LETTER,
+            WRONG_POSITION,
+        }
         enum class GameResult {
             WIN,
             LOSS

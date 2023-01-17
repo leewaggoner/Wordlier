@@ -9,6 +9,10 @@ object Destinations {
 
 class Actions(navController: NavController) {
     val navigateToGame: () -> Unit = {
-        navController.navigate(Destinations.Game)
+        navController.navigate(Destinations.Game) {
+            popUpTo(Destinations.Login) {
+                inclusive = true
+            }
+        }
     }
 }
