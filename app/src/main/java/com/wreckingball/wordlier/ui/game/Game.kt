@@ -9,6 +9,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -82,7 +85,11 @@ fun GameContent(
 @Composable
 fun HomeContentPreview() {
     GameContent(
-        state = GameState(GamePlay(GameCursor(), GameRepo()).board),
+        state = GameState(
+            board = remember {
+                mutableStateListOf()
+            }
+        ),
         onKeyboardClick = { },
     )
 }

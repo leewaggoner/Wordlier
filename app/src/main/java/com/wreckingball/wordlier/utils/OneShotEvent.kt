@@ -13,7 +13,7 @@ data class OneShotEvent<T : Any>(@get:VisibleForTesting val value: T) {
         }
     }
 
-    fun consume(): T? {
+    fun consume() : T? {
         return if (hasBeenConsumed) {
             null
         } else {

@@ -41,7 +41,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
         word = gameRepo.getDailyWord()
     }
 
-    private fun initRow(): SnapshotStateList<String> {
+    private fun initRow() : SnapshotStateList<String> {
         val row = mutableStateListOf<String>()
         for (i in 0 until MAX_WORD_LENGTH) {
             row.add("")
@@ -49,7 +49,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
         return row
     }
 
-    fun handleInput(key: String) {
+    suspend fun handleInput(key: String) {
         when (key) {
             ENTER -> handleGuess()
             BACK -> removeLetter()
@@ -77,32 +77,34 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
         cursor.back()
     }
 
-    private fun handleGuess() {
+    private suspend fun handleGuess() {
         val guess = board[cursor.getRow()].joinToString(separator = "")
 
-        //make sure the guessed word really is a word
-        if (!isValidWord()) {
-            invalidWordUICallback()
-            return
-        }
-
         if (guess.length == MAX_WORD_LENGTH) {
+            //make sure the guessed word is a real word
+            if (!isValidWord(guess)) {
+                invalidWordUICallback()
+                return
+            }
+
             if (guess != word) {
+                //guess is incorrect
                 if (cursor.getRow() < MAX_GUESSES - 1) {
                     colorLetters(guess)
                     cursor.nextRow()
                 } else {
+                    //last guess, game is over
                     gameResultUICallback(GameResult.LOSS)
                 }
             } else {
+                //guess is correct!
                 gameResultUICallback(GameResult.WIN)
             }
         }
     }
 
-    private fun isValidWord() : Boolean {
-        //TODO: Check some word database
-        return true
+    private suspend fun isValidWord(word: String) : Boolean {
+        return gameRepo.validateWord(word)
     }
 
     private fun colorLetters(guess: String) {
