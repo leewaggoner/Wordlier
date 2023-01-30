@@ -22,10 +22,15 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
                 GamePlay.Companion.GameResult.LOSS -> handleLoss()
             }
         }
+        gamePlay.setupCheckingInvalidWordCallback {
+            state = state.copy(loading = true)
+        }
         gamePlay.setupInvalidWordUICallback {
+            state = state.copy(loading = false)
             handleInvalidWord()
         }
         gamePlay.setupGuessResultUICallback { guess ->
+            state = state.copy(loading = false)
             handleGuessResult(guess)
         }
     }
@@ -47,7 +52,7 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     }
 
     fun onKeyboardClick(key: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             gamePlay.handleInput(key)
             state = state.copy(board = gamePlay.board)
         }

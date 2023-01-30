@@ -13,7 +13,8 @@ fun WordRow(
 ) {
     Row(
         modifier = modifier.then(
-            Modifier.padding(
+            Modifier
+                .padding(
                 start = 8.dp,
                 top = 4.dp,
                 end = 8.dp,

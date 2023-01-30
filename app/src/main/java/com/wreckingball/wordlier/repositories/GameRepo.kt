@@ -2,6 +2,8 @@ package com.wreckingball.wordlier.repositories
 
 import com.wreckingball.wordlier.network.NetworkResponse
 import com.wreckingball.wordlier.network.WordValidationService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,20 +42,23 @@ class GameRepo(private val wordValidationService: WordValidationService) {
                 response.data[0].word.isNotEmpty()
             }
             is NetworkResponse.Error -> {
-                false
+                //return true for anything other than 404-Not Found (invalid word). If the server is
+                //failing the game shouldn't stop
+                return response.code != 404
             }
         }
     }
 
-    private suspend fun callDictionaryApi(word: String) =
-        try {
-            NetworkResponse.Success(wordValidationService.validateWord(word))
-        } catch (ex: HttpException) {
-            ex.toNetworkErrorResponse()
-        } catch (ex: Exception) {
-            NetworkResponse.Error.UnknownNetworkError(ex)
+    private suspend fun callDictionaryApi(word: String) = withContext(Dispatchers.IO) {
+            try {
+                NetworkResponse.Success(wordValidationService.validateWord(word))
+            } catch (ex: HttpException) {
+                ex.toNetworkErrorResponse()
+            } catch (ex: Exception) {
+                NetworkResponse.Error.UnknownNetworkError(ex)
+            }
         }
-}
+    }
 
 fun HttpException.toNetworkErrorResponse(): NetworkResponse<Nothing> =
     when (val code = code()) {

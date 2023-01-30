@@ -11,10 +11,15 @@ const val BACK = "BACK"
 
 class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
     val board: SnapshotStateList<SnapshotStateList<String>> = mutableStateListOf()
+    private var checkingInvalidWordCallback: () -> Unit = { }
     private var invalidWordUICallback: () -> Unit = { }
     private var gameResultUICallback: (GameResult) -> Unit = { }
     private var guessResultUICallback: (List<Pair<String, GuessResult>>) -> Unit = { }
     private var word = "TRUST"
+
+    fun setupCheckingInvalidWordCallback(callback: () -> Unit) {
+        checkingInvalidWordCallback = callback
+    }
 
     fun setupGameResultUICallback(callback: (GameResult) -> Unit) {
         gameResultUICallback = callback
@@ -82,6 +87,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
 
         if (guess.length == MAX_WORD_LENGTH) {
             //make sure the guessed word is a real word
+            checkingInvalidWordCallback()
             if (!isValidWord(guess)) {
                 invalidWordUICallback()
                 return
