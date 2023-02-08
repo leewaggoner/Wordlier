@@ -24,6 +24,7 @@ import com.wreckingball.wordlier.models.GameState
 import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.ui.compose.GameBoard
 import com.wreckingball.wordlier.ui.compose.Keyboard
+import com.wreckingball.wordlier.ui.theme.NormalCell
 import com.wreckingball.wordlier.ui.theme.Purple500
 import com.wreckingball.wordlier.ui.theme.Teal200
 import com.wreckingball.wordlier.ui.theme.Typography
@@ -93,7 +94,50 @@ fun HomeContentPreview() {
     GameContent(
         state = GameState(
             board = remember {
-                mutableStateListOf()
+                mutableStateListOf(
+                    mutableStateListOf(
+                        Pair('S', NormalCell),
+                        Pair('L', NormalCell),
+                        Pair('A', NormalCell),
+                        Pair('T', NormalCell),
+                        Pair('E', NormalCell),
+                    ),
+                    mutableStateListOf(
+                        Pair('S', NormalCell),
+                        Pair('L', NormalCell),
+                        Pair('A', NormalCell),
+                        Pair('T', NormalCell),
+                        Pair('E', NormalCell),
+                    ),
+                    mutableStateListOf(
+                        Pair('S', NormalCell),
+                        Pair('L', NormalCell),
+                        Pair('A', NormalCell),
+                        Pair('T', NormalCell),
+                        Pair('E', NormalCell),
+                    ),
+                    mutableStateListOf(
+                        Pair('S', NormalCell),
+                        Pair('L', NormalCell),
+                        Pair('A', NormalCell),
+                        Pair('T', NormalCell),
+                        Pair('E', NormalCell),
+                    ),
+                    mutableStateListOf(
+                        Pair('S', NormalCell),
+                        Pair('L', NormalCell),
+                        Pair('A', NormalCell),
+                        Pair('T', NormalCell),
+                        Pair('E', NormalCell),
+                    ),
+                    mutableStateListOf(
+                        Pair('S', NormalCell),
+                        Pair('L', NormalCell),
+                        Pair('A', NormalCell),
+                        Pair('T', NormalCell),
+                        Pair('E', NormalCell),
+                    ),
+                )
             }
         ),
         onKeyboardClick = { },

@@ -3,12 +3,17 @@ package com.wreckingball.wordlier.ui.compose
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
+import com.wreckingball.wordlier.ui.theme.NormalCell
+import com.wreckingball.wordlier.ui.theme.WrongLetterCell
+import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 @Composable
 fun WordRow(
-    guess: List<String>,
+    guess: List<Pair<Char, Color>>,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -24,7 +29,10 @@ fun WordRow(
         horizontalArrangement = Arrangement.Center,
     ) {
         for ((index, character) in guess.withIndex()) {
-            CharacterCell(letter = character)
+            CharacterCell(
+                letter = character.first.toString(),
+                color = character.second
+            )
             if (index < guess.size - 1) {
                 Spacer(modifier = Modifier.width(8.dp))
             }
@@ -37,6 +45,12 @@ fun WordRow(
 fun WordRowPreview() {
     WordRow(
         modifier = Modifier.width(800.dp),
-        guess = listOf("W", "A", "R", "T", "S")
+        guess = listOf(
+            Pair('W', CorrectLetterCell),
+            Pair('A', WrongLetterCell),
+            Pair('R', WrongPositionCell),
+            Pair('T', NormalCell),
+            Pair('S', NormalCell),
+        )
     )
 }

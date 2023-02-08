@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.wreckingball.wordlier.models.GamePlay
+import com.wreckingball.wordlier.ui.theme.NormalCell
 
 @Composable
 fun GameBoard(
-    guesses: List<List<String>>,
+    guesses: List<List<Pair<Char, Color>>>,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -26,12 +29,48 @@ fun GameBoard(
 fun GameBoardPreview() {
     GameBoard(
         guesses = listOf(
-            listOf("S", "W", "O", "R", "D"),
-            listOf("S", "W", "O", "R", "D"),
-            listOf("S", "W", "O", "R", "D"),
-            listOf("S", "W", "O", "R", "D"),
-            listOf("S", "W", "O", "R", "D"),
-            listOf("S", "W", "O", "R", "D"),
+            listOf(
+                Pair('S', NormalCell),
+                Pair('W', NormalCell),
+                Pair('O', NormalCell),
+                Pair('R', NormalCell),
+                Pair('D', NormalCell),
+            ),
+            listOf(
+                Pair('S', NormalCell),
+                Pair('W', NormalCell),
+                Pair('O', NormalCell),
+                Pair('R', NormalCell),
+                Pair('D', NormalCell),
+            ),
+            listOf(
+                Pair('S', NormalCell),
+                Pair('W', NormalCell),
+                Pair('O', NormalCell),
+                Pair('R', NormalCell),
+                Pair('D', NormalCell),
+            ),
+            listOf(
+                Pair('S', NormalCell),
+                Pair('W', NormalCell),
+                Pair('O', NormalCell),
+                Pair('R', NormalCell),
+                Pair('D', NormalCell),
+            ),
+            listOf(
+                Pair('S', NormalCell),
+                Pair('W', NormalCell),
+                Pair('O', NormalCell),
+                Pair('R', NormalCell),
+                Pair('D', NormalCell),
+            ),
+            listOf(
+                Pair('S', NormalCell),
+                Pair('W', NormalCell),
+                Pair('O', NormalCell),
+                Pair('R', NormalCell),
+                Pair('D', NormalCell),
+            ),
         )
     )
 }
