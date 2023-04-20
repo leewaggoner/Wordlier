@@ -2,7 +2,12 @@ package com.wreckingball.wordlier.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.gson.GsonBuilder
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.wreckingball.wordlier.BuildConfig
 import com.wreckingball.wordlier.models.GameCursor
 import com.wreckingball.wordlier.models.GamePlay
@@ -11,8 +16,11 @@ import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.game.GameViewModel
 import com.wreckingball.wordlier.ui.login.LoginViewModel
+import com.wreckingball.wordlier.utils.DataStoreWrapper
 import com.wreckingball.wordlier.utils.PreferencesWrapper
-import okhttp3.Interceptor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -22,7 +30,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-private const val REPO_NAME = "com.wreckingball.wordlier"
+private const val DATA_STORE_NAME = "com.wreckingball.wordlier"
 private const val CONNECT_TIMEOUT = 30L
 private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 30L
@@ -31,9 +39,12 @@ val appModule = module {
     viewModel { LoginViewModel(playerRepo = get()) }
     viewModel { GameViewModel(gamePlay = get()) }
 
-    single { PlayerRepo( preferencesWrapper = get()) }
+    single { PlayerRepo(/*preferencesWrapper = get()*/ dataStore = get()) }
     single { GameRepo(wordValidationService = get()) }
+
     single { PreferencesWrapper(getSharedPrefs(androidContext())) }
+
+    single { DataStoreWrapper(getDataStore(androidContext())) }
     single { GamePlay(cursor = get(), gameRepo = get()) }
     single { GameCursor() }
     single<WordValidationService> {
@@ -50,8 +61,15 @@ val appModule = module {
 inline fun <reified T> createService(retrofit: Retrofit) : T = retrofit.create(T::class.java)
 
 private fun getSharedPrefs(context: Context) : SharedPreferences {
-    return context.getSharedPreferences(REPO_NAME, Context.MODE_PRIVATE)
+    return context.getSharedPreferences(DATA_STORE_NAME, Context.MODE_PRIVATE)
 }
+
+private fun getDataStore(context: Context) : DataStore<Preferences> =
+    PreferenceDataStoreFactory.create(
+        corruptionHandler = ReplaceFileCorruptionHandler(produceNewData = { emptyPreferences() }),
+        produceFile = { context.preferencesDataStoreFile(DATA_STORE_NAME) },
+        scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    )
 
 private fun retrofitService(
     url: String,

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.wreckingball.wordlier.models.BaseViewModel
 import com.wreckingball.wordlier.models.GamePlay

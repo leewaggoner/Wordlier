@@ -27,8 +27,10 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     }
 
     private fun loadName() {
-        val name = playerRepo.getPlayerData().name
-        state = state.copy(name = name, buttonEnabled = name.isNotEmpty())
+        viewModelScope.launch {
+            val name = playerRepo.getPlayerName()
+            state = state.copy(name = name, buttonEnabled = name.isNotEmpty())
+        }
     }
 
     fun onNameChange(newName: String) {
@@ -36,8 +38,8 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     }
 
     fun setPlayerData(){
-        playerRepo.setPlayerData(PlayerData(state.name))
         viewModelScope.launch(Dispatchers.Main) {
+            playerRepo.setPlayerName(PlayerData(state.name))
             navigation.emit(LoginNavigation.GoToHome.toEvent())
         }
     }

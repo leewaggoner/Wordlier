@@ -1,16 +1,17 @@
 package com.wreckingball.wordlier.repositories
 
 import com.wreckingball.wordlier.models.PlayerData
-import com.wreckingball.wordlier.utils.PreferencesWrapper
+import com.wreckingball.wordlier.utils.DataStoreWrapper
+import kotlinx.coroutines.flow.Flow
 
-private const val PLAYER_NAME_TAG = "PlayerName"
-
-class PlayerRepo(private val preferencesWrapper: PreferencesWrapper) {
-    fun setPlayerData(playerData: PlayerData) {
-        preferencesWrapper.putString(PLAYER_NAME_TAG, playerData.name)
+class PlayerRepo(/*private val preferencesWrapper: PreferencesWrapper*/ private val dataStore: DataStoreWrapper) {
+    suspend fun setPlayerName(playerData: PlayerData) {
+        dataStore.putPlayerName(playerData.name)
+//        preferencesWrapper.putString(PLAYER_NAME_TAG, playerData.name)
     }
 
-    fun getPlayerData() : PlayerData {
-        return PlayerData(preferencesWrapper.getString(PLAYER_NAME_TAG, ""))
+    suspend fun getPlayerName() : String {
+        return dataStore.getPlayerName("")
+//        return PlayerData(preferencesWrapper.getString(PLAYER_NAME_TAG, ""))
     }
 }
