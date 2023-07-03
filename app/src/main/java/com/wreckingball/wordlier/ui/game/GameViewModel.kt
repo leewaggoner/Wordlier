@@ -21,14 +21,15 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
             when (result) {
                 GamePlay.Companion.GameResult.WIN -> handleWin()
                 GamePlay.Companion.GameResult.LOSS -> handleLoss()
+                GamePlay.Companion.GameResult.NEXT_GUESS -> {}
             }
         }
         gamePlay.registerCheckingInvalidWordCallback {
             state = state.copy(loading = true)
         }
-        gamePlay.registerInvalidWordUICallback {
+        gamePlay.registerInvalidWordUICallback { msgId ->
             state = state.copy(loading = false)
-            handleInvalidWord()
+            handleInvalidWord(msgId)
         }
         gamePlay.registerGuessResultUICallback {
             state = state.copy(loading = false)
@@ -43,7 +44,8 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         Log.e("-----LEE-----", "You lost!")
     }
 
-    private fun handleInvalidWord() {
+    private fun handleInvalidWord(msgId: Int) {
+        //launch error snack bar
         Log.e("-----LEE-----", "Not a word. Try again!")
     }
 

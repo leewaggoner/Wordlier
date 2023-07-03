@@ -5,4 +5,6 @@
     <string name="player_name_hint">Enter Your Name</string>
     <string name="start_button_text">Play Wordlier</string>
     <string name="player_name_error">Please enter your name.</string>
+    <string name="invalidWord">That is not a word.</string>
+    <string name="invalidLength">The word must be five letters long.</string>
 </resources>
