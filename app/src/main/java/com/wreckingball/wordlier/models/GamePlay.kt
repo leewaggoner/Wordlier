@@ -8,6 +8,7 @@ import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 import com.wreckingball.wordlier.ui.theme.NormalCell
 import com.wreckingball.wordlier.ui.theme.WrongLetterCell
+import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 const val MAX_WORD_LENGTH = 5
 const val MAX_GUESSES = 6
@@ -122,11 +123,17 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
         val guessList = guess.toList()
         val resultList = mutableListOf<Color>()
         for ((index, letter) in guessList.withIndex()) {
-            resultList.add(if (letter == word[index]) {
-                CorrectLetterCell
-            } else {
-                WrongLetterCell
-            })
+            resultList.add(
+                if (word.contains(letter)) {
+                    if (letter == word[index]) {
+                        CorrectLetterCell
+                    } else {
+                        WrongPositionCell
+                    }
+                } else {
+                    WrongLetterCell
+                }
+            )
         }
         val result = guessList.zip(resultList)
         board[cursor.getRow()] = result.toMutableStateList()
