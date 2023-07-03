@@ -108,7 +108,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
         }
     }
 
-    private fun colorLetters(theWord: String, guess: String) : List<Pair<Char, Color>> {
+    fun colorLetters(theWord: String, guess: String) : List<Pair<Char, Color>> {
         val guessList = guess.toList()
         val resultList = mutableListOf<Color>()
         for ((index, letter) in guessList.withIndex()) {
