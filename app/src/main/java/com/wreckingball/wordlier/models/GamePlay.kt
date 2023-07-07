@@ -6,17 +6,14 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.Color
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.repositories.GameRepo
-import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 import com.wreckingball.wordlier.ui.theme.NormalCell
-import com.wreckingball.wordlier.ui.theme.WrongLetterCell
-import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 const val MAX_WORD_LENGTH = 5
 const val MAX_GUESSES = 6
 const val ENTER = "ENTER"
 const val BACK = "BACK"
 
-class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
+class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, private val gameRules: GameRules) {
     val board: SnapshotStateList<SnapshotStateList<Pair<Char, Color>>> = mutableStateListOf()
     private var checkingInvalidWordCallback: () -> Unit = { }
     private var invalidWordUICallback: (msgId: Int) -> Unit = { }
@@ -73,7 +70,12 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
         val guess = board[cursor.getRow()].map { it.first }.joinToString(separator = "").trim()
         if (guess.length == MAX_WORD_LENGTH) {
             if (isValidWord(guess)) {
-                gameResultUICallback(handleGuess(guess))
+                colorLetters(word, guess)
+                val result = gameRules.handleGuess(word, guess, cursor.getRow())
+                if (result == GameResult.NEXT_GUESS) {
+                    cursor.nextRow()
+                }
+                gameResultUICallback(result)
             } else {
                 invalidWordUICallback(R.string.invalidWord)
             }
@@ -88,43 +90,10 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
         return gameRepo.validateWord(guess)
     }
 
-    private fun handleGuess(guess: String) : GameResult {
-        val charList = colorLetters(word, guess)
+    private fun colorLetters(word: String, guess: String) {
+        val charList = gameRules.colorLetters(word, guess)
         board[cursor.getRow()] = charList.toMutableStateList()
         guessResultUICallback()
-
-        return if (guess != word) {
-            //guess is incorrect
-            if (cursor.getRow() < MAX_GUESSES - 1) {
-                cursor.nextRow()
-                GameResult.NEXT_GUESS
-            } else {
-                //last guess, game is over
-                GameResult.LOSS
-            }
-        } else {
-            //guess is correct!
-            GameResult.WIN
-        }
-    }
-
-    fun colorLetters(theWord: String, guess: String) : List<Pair<Char, Color>> {
-        val guessList = guess.toList()
-        val resultList = mutableListOf<Color>()
-        for ((index, letter) in guessList.withIndex()) {
-            resultList.add(
-                if (theWord.contains(letter)) {
-                    if (letter == theWord[index]) {
-                        CorrectLetterCell
-                    } else {
-                        WrongPositionCell
-                    }
-                } else {
-                    WrongLetterCell
-                }
-            )
-        }
-        return guessList.zip(resultList)
     }
 
     private fun handleRemoveLetter() {
@@ -144,14 +113,6 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo) {
 
             board[cursor.getRow()][cursor.getColumn()] = Pair(character.first(), NormalCell)
             cursor.advance()
-        }
-    }
-
-    companion object {
-        enum class GameResult {
-            NEXT_GUESS,
-            WIN,
-            LOSS
         }
     }
 }

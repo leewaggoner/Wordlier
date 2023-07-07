@@ -12,23 +12,23 @@ import java.util.Locale
 class GameRepo(private val wordValidationService: WordValidationService) {
     private val words = mutableMapOf<String, String>()
     fun initWords() {
-        words["2023-02-07"] = "FAULT"
-        words["2023-02-08"] = "ADULT"
-        words["2023-02-09"] = "GRANT"
-        words["2023-02-10"] = "EARTH"
-        words["2023-02-11"] = "CRIME"
-        words["2023-02-12"] = "ROBIN"
-        words["2023-02-13"] = "BIRTH"
-        words["2023-02-14"] = "STALE"
-        words["2023-02-15"] = "ANGER"
-        words["2023-02-16"] = "DERBY"
-        words["2023-02-17"] = "FLANK"
-        words["2023-02-18"] = "GHOST"
-        words["2023-02-19"] = "WINCH"
-        words["2023-02-20"] = "AGENT"
-        words["2023-02-21"] = "BLOCK"
-        words["2023-02-22"] = "CHAIN"
-        words["2023-02-23"] = "DEPTH"
+        words["2023-07-07"] = "FAULT"
+        words["2023-07-08"] = "ADULT"
+        words["2023-07-09"] = "GRANT"
+        words["2023-07-10"] = "EARTH"
+        words["2023-07-11"] = "CRIME"
+        words["2023-07-12"] = "ROBIN"
+        words["2023-07-13"] = "BIRTH"
+        words["2023-07-14"] = "STALE"
+        words["2023-07-15"] = "ANGER"
+        words["2023-07-16"] = "DERBY"
+        words["2023-07-17"] = "FLANK"
+        words["2023-07-18"] = "GHOST"
+        words["2023-07-19"] = "WINCH"
+        words["2023-07-20"] = "AGENT"
+        words["2023-07-21"] = "BLOCK"
+        words["2023-07-22"] = "CHAIN"
+        words["2023-07-23"] = "DEPTH"
     }
 
     fun getDailyWord() : String {
@@ -65,9 +65,7 @@ fun HttpException.toNetworkErrorResponse(): NetworkResponse<Nothing> =
     when (val code = code()) {
         400 -> NetworkResponse.Error.BadRequest(this, code)
         401,
-        403,
-        -> NetworkResponse.Error.Unauthorized(this, code)
-
+        403 -> NetworkResponse.Error.Unauthorized(this, code)
         404 -> NetworkResponse.Error.NotFound(this, code)
         429 -> NetworkResponse.Error.TooManyRequests(this, code)
         in 400..499 -> NetworkResponse.Error.ApiError(this, code)

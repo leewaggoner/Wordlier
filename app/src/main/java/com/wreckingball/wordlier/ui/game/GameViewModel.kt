@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.wreckingball.wordlier.models.BaseViewModel
 import com.wreckingball.wordlier.models.GamePlay
+import com.wreckingball.wordlier.models.GameResult
 import com.wreckingball.wordlier.models.GameState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,9 +20,9 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         gamePlay.registerGameResultUICallback { result ->
             state = state.copy(loading = false)
             when (result) {
-                GamePlay.Companion.GameResult.WIN -> handleWin()
-                GamePlay.Companion.GameResult.LOSS -> handleLoss()
-                GamePlay.Companion.GameResult.NEXT_GUESS -> {}
+                GameResult.WIN -> handleWin()
+                GameResult.LOSS -> handleLoss()
+                else -> {}
             }
         }
         gamePlay.registerCheckingInvalidWordCallback {

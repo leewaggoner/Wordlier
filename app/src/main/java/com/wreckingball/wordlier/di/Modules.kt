@@ -11,13 +11,13 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import com.wreckingball.wordlier.BuildConfig
 import com.wreckingball.wordlier.models.GameCursor
 import com.wreckingball.wordlier.models.GamePlay
+import com.wreckingball.wordlier.models.GameRules
 import com.wreckingball.wordlier.network.WordValidationService
 import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.game.GameViewModel
 import com.wreckingball.wordlier.ui.login.LoginViewModel
 import com.wreckingball.wordlier.utils.DataStoreWrapper
-import com.wreckingball.wordlier.utils.PreferencesWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -39,13 +39,16 @@ val appModule = module {
     viewModel { LoginViewModel(playerRepo = get()) }
     viewModel { GameViewModel(gamePlay = get()) }
 
-    single { PlayerRepo(/*preferencesWrapper = get()*/ dataStore = get()) }
-    single { GameRepo(wordValidationService = get()) }
-
-    single { PreferencesWrapper(getSharedPrefs(androidContext())) }
-
-    single { DataStoreWrapper(getDataStore(androidContext())) }
-    single { GamePlay(cursor = get(), gameRepo = get()) }
+    factory { PlayerRepo(dataStore = get()) }
+    factory { GameRepo(wordValidationService = get()) }
+    factory { GameRules() }
+    single {
+        GamePlay(
+            cursor = get(),
+            gameRepo = get(),
+            gameRules = get(),
+        )
+    }
     single { GameCursor() }
     single<WordValidationService> {
         createService(
@@ -56,6 +59,7 @@ val appModule = module {
             )
         )
     }
+    single { DataStoreWrapper(getDataStore(androidContext())) }
 }
 
 inline fun <reified T> createService(retrofit: Retrofit) : T = retrofit.create(T::class.java)

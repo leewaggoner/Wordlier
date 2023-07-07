@@ -5,10 +5,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.game.Game
 import com.wreckingball.wordlier.ui.login.Login
-import org.koin.androidx.compose.inject
 
 @Composable
 fun WordlierApp() {
