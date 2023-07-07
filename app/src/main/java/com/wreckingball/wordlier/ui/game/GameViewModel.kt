@@ -5,7 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.wreckingball.wordlier.models.BACK
 import com.wreckingball.wordlier.models.BaseViewModel
+import com.wreckingball.wordlier.models.ENTER
 import com.wreckingball.wordlier.models.GamePlay
 import com.wreckingball.wordlier.models.GameResult
 import com.wreckingball.wordlier.models.GameState
@@ -17,23 +19,8 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
 
     init {
         gamePlay.initializeGame()
-        gamePlay.registerGameResultUICallback { result ->
-            state = state.copy(loading = false)
-            when (result) {
-                GameResult.WIN -> handleWin()
-                GameResult.LOSS -> handleLoss()
-                else -> {}
-            }
-        }
-        gamePlay.registerCheckingInvalidWordCallback {
-            state = state.copy(loading = true)
-        }
         gamePlay.registerInvalidWordUICallback { msgId ->
-            state = state.copy(loading = false)
             handleInvalidWord(msgId)
-        }
-        gamePlay.registerGuessResultUICallback {
-            state = state.copy(loading = false)
         }
     }
 
@@ -46,14 +33,33 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     }
 
     private fun handleInvalidWord(msgId: Int) {
+        state = state.copy(loading = false)
         //launch error snack bar
         Log.e("-----LEE-----", "Not a word. Try again!")
     }
 
     fun onKeyboardClick(key: String) {
-        viewModelScope.launch(Dispatchers.Main) {
-            gamePlay.handleInput(key)
-            state = state.copy(board = gamePlay.board)
+        when (key) {
+            ENTER -> {
+                state = state.copy(loading = true)
+                viewModelScope.launch(Dispatchers.Main) {
+                    when (gamePlay.handleEnter()) {
+                        GameResult.NEXT_GUESS -> state = state.copy(loading = false)
+                        GameResult.WIN -> {
+                            state = state.copy(loading = false)
+                            handleWin()
+                        }
+                        GameResult.LOSS -> {
+                            state = state.copy(loading = false)
+                            handleLoss()
+                        }
+                        else -> {}
+                    }
+                }
+            }
+            BACK -> gamePlay.handleRemoveLetter()
+            else -> gamePlay.handleAddLetter(key)
         }
+        state = state.copy(board = gamePlay.board)
     }
 }
