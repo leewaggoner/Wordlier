@@ -17,19 +17,6 @@ class GameRules {
             WrongLetterCell
         )
 
-//        for ((index, letter) in guessList.withIndex()) {
-//            if (word.contains(letter) && (characterCount[letter] ?: 0) > 0) {
-//                if (letter == word[index]) {
-//                    resultList[index] = CorrectLetterCell
-//                } else {
-//                    resultList[index] = WrongPositionCell
-//                }
-//                //need to mark a subsequent hit as a wrong letter
-//                val count = (characterCount[letter] ?: 1) - 1
-//                characterCount[letter] = count
-//            }
-//        }
-
         //need to do two passes because word = adult and guess = trust shows the first 't' as
         //WrongPositionCell instead of WrongLetterCell and the last 't' as WrongLetterCell
         for ((index, letter) in guessList.withIndex()) {
