@@ -1,4 +1,4 @@
-package com.wreckingball.wordlier.models
+package com.wreckingball.wordlier.domain
 
 import androidx.compose.ui.graphics.Color
 import com.wreckingball.wordlier.ui.theme.CorrectLetterCell

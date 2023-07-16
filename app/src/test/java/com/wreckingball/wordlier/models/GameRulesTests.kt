@@ -1,6 +1,9 @@
 package com.wreckingball.wordlier.models
 
 import com.wreckingball.wordlier.di.appModule
+import com.wreckingball.wordlier.domain.GameResult
+import com.wreckingball.wordlier.domain.GameRules
+import com.wreckingball.wordlier.domain.MAX_GUESSES
 import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 import com.wreckingball.wordlier.ui.theme.WrongLetterCell
 import com.wreckingball.wordlier.ui.theme.WrongPositionCell

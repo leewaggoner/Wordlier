@@ -1,10 +1,9 @@
-package com.wreckingball.wordlier.models
+package com.wreckingball.wordlier.domain
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.Color
-import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.ui.theme.NormalCell
 
@@ -15,10 +14,10 @@ const val BACK = "BACK"
 
 class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, private val gameRules: GameRules) {
     val board: SnapshotStateList<SnapshotStateList<Pair<Char, Color>>> = mutableStateListOf()
-    private var invalidWordUICallback: (msgId: Int) -> Unit = { }
+    private var invalidWordUICallback: (state: GameplayState) -> Unit = { }
     private var word = "TRUST"
 
-    fun registerInvalidWordUICallback(callback: (msgId: Int) -> Unit) {
+    fun registerInvalidWordUICallback(callback: (state: GameplayState) -> Unit) {
         invalidWordUICallback = callback
     }
 
@@ -54,11 +53,11 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
                 }
                 result
             } else {
-                invalidWordUICallback(R.string.invalidWord)
+                invalidWordUICallback(GameplayState.NotAWord)
                 GameResult.DO_NOTHING
             }
         } else {
-            invalidWordUICallback(R.string.invalidLength)
+            invalidWordUICallback(GameplayState.ShortWordLength)
             return GameResult.DO_NOTHING
         }
     }

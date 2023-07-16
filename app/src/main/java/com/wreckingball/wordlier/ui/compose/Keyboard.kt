@@ -13,8 +13,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.R
-import com.wreckingball.wordlier.models.BACK
-import com.wreckingball.wordlier.models.ENTER
+import com.wreckingball.wordlier.domain.BACK
+import com.wreckingball.wordlier.domain.ENTER
 
 @Composable
 fun Keyboard(

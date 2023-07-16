@@ -1,4 +1,4 @@
-package com.wreckingball.wordlier.models
+package com.wreckingball.wordlier.domain
 
 enum class GameResult {
     DO_NOTHING,

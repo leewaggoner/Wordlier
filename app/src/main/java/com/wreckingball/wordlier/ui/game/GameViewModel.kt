@@ -5,12 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.wreckingball.wordlier.models.BACK
-import com.wreckingball.wordlier.models.BaseViewModel
-import com.wreckingball.wordlier.models.ENTER
-import com.wreckingball.wordlier.models.GamePlay
-import com.wreckingball.wordlier.models.GameResult
-import com.wreckingball.wordlier.models.GameState
+import com.wreckingball.wordlier.R
+import com.wreckingball.wordlier.domain.BACK
+import com.wreckingball.wordlier.domain.ENTER
+import com.wreckingball.wordlier.domain.GamePlay
+import com.wreckingball.wordlier.domain.GameResult
+import com.wreckingball.wordlier.domain.GameState
+import com.wreckingball.wordlier.domain.GameplayState
+import com.wreckingball.wordlier.ui.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,8 +21,8 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
 
     init {
         gamePlay.initializeGame()
-        gamePlay.registerInvalidWordUICallback { msgId ->
-            handleInvalidWord(msgId)
+        gamePlay.registerInvalidWordUICallback { state ->
+            handleInvalidWord(state)
         }
     }
 
@@ -32,10 +34,17 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         Log.e("-----LEE-----", "You lost!")
     }
 
-    private fun handleInvalidWord(msgId: Int) {
-        state = state.copy(loading = false)
+    private fun handleInvalidWord(gameplayState: GameplayState) {
         //launch error snack bar
-        Log.e("-----LEE-----", "Not a word. Try again!")
+        when (gameplayState) {
+            GameplayState.NotAWord -> state = state.copy(loading = false, errMsgId = R.string.invalidWord)
+            GameplayState.ShortWordLength -> state = state.copy(loading = false, errMsgId = R.string.invalidLength)
+            else -> {}
+        }
+    }
+
+    fun clearErrorMsg() {
+        state = state.copy(errMsgId = 0)
     }
 
     fun onKeyboardClick(key: String) {
@@ -53,13 +62,18 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
                             state = state.copy(loading = false)
                             handleLoss()
                         }
-                        else -> {}
+                        GameResult.DO_NOTHING -> {}
                     }
                 }
             }
-            BACK -> gamePlay.handleRemoveLetter()
-            else -> gamePlay.handleAddLetter(key)
+            BACK -> {
+                gamePlay.handleRemoveLetter()
+                state = state.copy(board = gamePlay.board)
+            }
+            else -> {
+                gamePlay.handleAddLetter(key)
+                state = state.copy(board = gamePlay.board)
+            }
         }
-        state = state.copy(board = gamePlay.board)
     }
 }

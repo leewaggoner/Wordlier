@@ -1,4 +1,4 @@
-package com.wreckingball.wordlier.models
+package com.wreckingball.wordlier.ui
 
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel

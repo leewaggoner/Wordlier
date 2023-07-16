@@ -9,9 +9,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.wreckingball.wordlier.BuildConfig
-import com.wreckingball.wordlier.models.GameCursor
-import com.wreckingball.wordlier.models.GamePlay
-import com.wreckingball.wordlier.models.GameRules
+import com.wreckingball.wordlier.domain.GameCursor
+import com.wreckingball.wordlier.domain.GamePlay
+import com.wreckingball.wordlier.domain.GameRules
 import com.wreckingball.wordlier.network.WordValidationService
 import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.repositories.PlayerRepo
