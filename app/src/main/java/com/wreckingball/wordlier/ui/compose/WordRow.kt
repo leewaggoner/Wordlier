@@ -17,6 +17,8 @@ import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 @Composable
 fun WordRow(
+    shake: Boolean,
+    onShakeFinished: () -> Unit,
     guess: List<Pair<Char, Color>>,
     modifier: Modifier = Modifier
 ) {
@@ -29,6 +31,7 @@ fun WordRow(
                 end = 8.dp,
                 bottom = 4.dp,
             )
+            .shake(shake) { onShakeFinished() },
         ),
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -48,6 +51,8 @@ fun WordRow(
 @Composable
 fun WordRowPreview() {
     WordRow(
+        shake = false,
+        onShakeFinished = { },
         modifier = Modifier.width(800.dp),
         guess = listOf(
             Pair('W', CorrectLetterCell),

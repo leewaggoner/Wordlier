@@ -6,19 +6,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.wreckingball.wordlier.domain.MAX_GUESSES
 import com.wreckingball.wordlier.ui.theme.NormalCell
 
 @Composable
 fun GameBoard(
     guesses: List<List<Pair<Char, Color>>>,
+    shakeRow: Int,
+    onShakeFinished: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        for (guess in guesses) {
-            WordRow(guess = guess)
+        guesses.forEachIndexed { index, guess ->
+            WordRow(
+                shake = shakeRow in 0 until MAX_GUESSES && shakeRow == index,
+                onShakeFinished = onShakeFinished,
+                guess = guess
+            )
         }
     }
 }
@@ -70,6 +77,8 @@ fun GameBoardPreview() {
                 Pair('R', NormalCell),
                 Pair('D', NormalCell),
             ),
-        )
+        ),
+        shakeRow = -1,
+        onShakeFinished = { }
     )
 }

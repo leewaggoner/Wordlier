@@ -36,15 +36,32 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
 
     private fun handleInvalidWord(gameplayState: GameplayState) {
         //launch error snack bar
+        val currentRow = gamePlay.getCurrentRow()
         when (gameplayState) {
-            GameplayState.NotAWord -> state = state.copy(loading = false, errMsgId = R.string.invalidWord)
-            GameplayState.ShortWordLength -> state = state.copy(loading = false, errMsgId = R.string.invalidLength)
+            GameplayState.NotAWord -> {
+                state = state.copy(
+                    loading = false,
+                    errMsgId = R.string.invalidWord,
+                    shakeRow = currentRow
+                )
+            }
+            GameplayState.ShortWordLength -> {
+                state = state.copy(
+                    loading = false,
+                    errMsgId = R.string.invalidLength,
+                    shakeRow = currentRow
+                )
+            }
             else -> {}
         }
     }
 
     fun clearErrorMsg() {
         state = state.copy(errMsgId = 0)
+    }
+
+    fun onShakeFinished() {
+        state = state.copy(shakeRow = -1)
     }
 
     fun onKeyboardClick(key: String) {

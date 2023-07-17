@@ -8,4 +8,5 @@ data class GameState(
     val state: GameplayState = GameplayState.GameStart,
     val loading: Boolean = false,
     val errMsgId: Int = 0,
+    val shakeRow: Int = -1,
 )

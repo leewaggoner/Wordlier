@@ -43,6 +43,7 @@ fun Game(
 ) {
     GameContent(
         state = viewModel.state,
+        onShakeFinished = viewModel::onShakeFinished,
         onKeyboardClick = viewModel::onKeyboardClick,
         clearErrorMsg = viewModel::clearErrorMsg,
     )
@@ -51,6 +52,7 @@ fun Game(
 @Composable
 fun GameContent(
     state: GameState,
+    onShakeFinished: () -> Unit,
     onKeyboardClick: (String) -> Unit,
     clearErrorMsg: () -> Unit,
 ) {
@@ -83,7 +85,9 @@ fun GameContent(
                     modifier = Modifier
                         .padding(top = 32.dp)
                         .fillMaxWidth(),
-                    guesses = state.board
+                    shakeRow = state.shakeRow,
+                    onShakeFinished = onShakeFinished,
+                    guesses = state.board,
                 )
                 Keyboard(
                     modifier = Modifier
@@ -177,6 +181,7 @@ fun HomeContentPreview() {
                 )
             }
         ),
+        onShakeFinished = { },
         onKeyboardClick = { },
         clearErrorMsg = { }
     )

@@ -17,6 +17,8 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
     private var invalidWordUICallback: (state: GameplayState) -> Unit = { }
     private var word = "TRUST"
 
+    fun getCurrentRow() = cursor.getRow()
+
     fun registerInvalidWordUICallback(callback: (state: GameplayState) -> Unit) {
         invalidWordUICallback = callback
     }
