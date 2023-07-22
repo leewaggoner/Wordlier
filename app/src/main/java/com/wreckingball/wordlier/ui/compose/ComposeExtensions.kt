@@ -31,3 +31,27 @@ fun Modifier.shake(enabled: Boolean, onAnimationFinished: () -> Unit) = composed
         properties["enabled"] = enabled
     }
 )
+
+fun Modifier.flip(enabled: Boolean, onAnimationFinished: () -> Unit) = composed(
+    factory = {
+        val size by animateFloatAsState(
+            targetValue = if (enabled) 0.0f else 1.0f,
+            animationSpec = repeatable(
+                iterations = 2,
+                animation = tween(durationMillis = 500, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse,
+            ),
+            finishedListener = {
+                onAnimationFinished()
+            },
+        )
+
+        Modifier.graphicsLayer {
+            scaleY = if (enabled) size else 1.0f
+        }
+    },
+    inspectorInfo = debugInspectorInfo {
+        name = "flip"
+        properties["enabled"] = enabled
+    }
+)

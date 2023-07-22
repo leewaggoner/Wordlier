@@ -26,34 +26,47 @@ fun CharacterCell(
     cellHeight: Int = 50,
     cellWidth: Int = cellHeight,
     letterSize: Int = 36,
+    flip: Boolean = false,
+    onFlipFinished: (() -> Unit)? = null,
     onClick: ((String) -> Unit)? = null
 ) {
     Box(
         modifier = modifier.then(
             Modifier
-                .size(cellWidth.dp, cellHeight.dp)
-                .border(
-                    width = 1.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    color = color,
-                )
-                .clickable {
-                    onClick?.let {
-                        onClick(letter)
+                .flip(flip) {
+                    onFlipFinished?.let {
+                        onFlipFinished()
                     }
                 },
         ),
-        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = letter,
-            fontSize = letterSize.sp,
-            fontWeight = FontWeight.Bold,
-        )
+        Box(
+            modifier = modifier.then(
+                Modifier
+                    .size(cellWidth.dp, cellHeight.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(
+                        color = color,
+                    )
+                    .clickable {
+                        onClick?.let {
+                            onClick(letter)
+                        }
+                    }
+            ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = letter,
+                fontSize = letterSize.sp,
+                fontWeight = FontWeight.Bold,
+            )
+        }
     }
 }
 
@@ -62,6 +75,6 @@ fun CharacterCell(
 fun CharacterCellPreview() {
     CharacterCell(
         letter = "W",
-        color = NormalCell
+        color = NormalCell,
     )
 }
