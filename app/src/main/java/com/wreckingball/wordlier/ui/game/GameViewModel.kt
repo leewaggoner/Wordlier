@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 
 class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     var state by mutableStateOf(GameState(gamePlay.board))
+    private var gameResult: GameResult = GameResult.DoNothing
     private var curGuess: List<GameLetter>? = null
 
     init {
@@ -68,11 +69,16 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     }
 
     fun onKeyboardClick(key: String) {
+        if (gameResult is GameResult.Win || gameResult is GameResult.Loss) {
+            //game is over -- no more input, please
+            return
+        }
         when (key) {
             ENTER -> {
                 state = state.copy(loading = true)
                 viewModelScope.launch(Dispatchers.Main) {
-                    when (val result = gamePlay.handleEnter()) {
+                    gameResult = gamePlay.handleEnter()
+                    when (val result = gameResult) {
                         is GameResult.NextGuess -> {
                             state = state.copy(loading = false)
                             //at this point the row has already been advanced
