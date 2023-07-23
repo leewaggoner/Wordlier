@@ -56,18 +56,22 @@ class GameRules {
         return characterCount
     }
 
-    fun handleGuess(word: String, guess: String, currentRow: Int) : GameResult {
+    fun handleGuess(
+        word: String,
+        guess: String,
+        currentRow: Int,
+        coloredWord: List<Pair<Char, Color>>) : GameResult {
         return if (guess != word) {
             //guess is incorrect
             if (currentRow < MAX_GUESSES - 1) {
-                GameResult.NEXT_GUESS
+                GameResult.NextGuess(coloredWord)
             } else {
                 //last guess, game is over
-                GameResult.LOSS
+                GameResult.Loss(coloredWord)
             }
         } else {
             //guess is correct!
-            GameResult.WIN
+            GameResult.Win(coloredWord)
         }
     }
 }

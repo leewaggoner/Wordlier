@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wreckingball.wordlier.domain.MAX_WORD_LENGTH
 import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 import com.wreckingball.wordlier.ui.theme.NormalCell
 import com.wreckingball.wordlier.ui.theme.WrongLetterCell
@@ -17,10 +18,12 @@ import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 @Composable
 fun WordRow(
+    modifier: Modifier = Modifier,
     shake: Boolean,
     onShakeFinished: () -> Unit,
+    flipIndex: Int = -1,
+    onFlipFinished: () -> Unit,
     guess: List<Pair<Char, Color>>,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.then(
@@ -38,7 +41,10 @@ fun WordRow(
         for ((index, character) in guess.withIndex()) {
             CharacterCell(
                 letter = character.first.toString(),
-                color = character.second
+                color = character.second,
+                flip = flipIndex in 0 until MAX_WORD_LENGTH && flipIndex == index,
+                onFlipFinished = onFlipFinished,
+                onClick = { },
             )
             if (index < guess.size - 1) {
                 Spacer(modifier = Modifier.width(8.dp))
@@ -53,6 +59,7 @@ fun WordRowPreview() {
     WordRow(
         shake = false,
         onShakeFinished = { },
+        onFlipFinished = { },
         modifier = Modifier.width(800.dp),
         guess = listOf(
             Pair('W', CorrectLetterCell),

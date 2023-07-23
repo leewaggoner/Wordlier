@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.domain.BACK
@@ -12,12 +13,14 @@ import com.wreckingball.wordlier.domain.GamePlay
 import com.wreckingball.wordlier.domain.GameResult
 import com.wreckingball.wordlier.domain.GameState
 import com.wreckingball.wordlier.domain.GameplayState
+import com.wreckingball.wordlier.domain.MAX_WORD_LENGTH
 import com.wreckingball.wordlier.ui.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     var state by mutableStateOf(GameState(gamePlay.board))
+    private var curGuess: List<Pair<Char, Color>>? = null
 
     init {
         gamePlay.initializeGame()
@@ -69,17 +72,23 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
             ENTER -> {
                 state = state.copy(loading = true)
                 viewModelScope.launch(Dispatchers.Main) {
-                    when (gamePlay.handleEnter()) {
-                        GameResult.NEXT_GUESS -> state = state.copy(loading = false)
-                        GameResult.WIN -> {
+                    when (val result = gamePlay.handleEnter()) {
+                        is GameResult.NextGuess -> {
                             state = state.copy(loading = false)
+                            //at this point the row has already been advanced
+                            startLetterFlip(gamePlay.getCurrentRow() - 1, result.coloredWord)
+                        }
+                        is GameResult.Win -> {
+                            state = state.copy(loading = false)
+                            startLetterFlip(gamePlay.getCurrentRow(), result.coloredWord)
                             handleWin()
                         }
-                        GameResult.LOSS -> {
+                        is GameResult.Loss -> {
                             state = state.copy(loading = false)
+                            startLetterFlip(gamePlay.getCurrentRow(), result.coloredWord)
                             handleLoss()
                         }
-                        GameResult.DO_NOTHING -> {}
+                        GameResult.DoNothing -> {}
                     }
                 }
             }
@@ -90,6 +99,28 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
             else -> {
                 gamePlay.handleAddLetter(key)
                 state = state.copy(board = gamePlay.board)
+            }
+        }
+    }
+
+    private fun startLetterFlip(curRow: Int, coloredWord: List<Pair<Char, Color>>?) {
+        curGuess = coloredWord
+        curGuess?.let { word ->
+            gamePlay.updateLetter(curRow, 0, word[0])
+            state = state.copy(board = gamePlay.board, flipRow = curRow, flipIndex = 0)
+        }
+    }
+
+    fun onFlipFinished() {
+        curGuess?.let { word ->
+            val flipIndex = state.flipIndex + 1
+            val curRow = state.flipRow
+            state = if (flipIndex < MAX_WORD_LENGTH) {
+                gamePlay.updateLetter(curRow, flipIndex, word[flipIndex])
+                state.copy(board = gamePlay.board, flipRow = curRow, flipIndex = flipIndex)
+            } else {
+                curGuess = null
+                state.copy(flipRow = -1, flipIndex = -1)
             }
         }
     }

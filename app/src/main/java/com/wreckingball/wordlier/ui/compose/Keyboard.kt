@@ -33,6 +33,7 @@ fun Keyboard(
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
+                    onFlipFinished = { },
                 )
                 if (index < keys.length - 1) {
                     Spacer(modifier = Modifier.width(4.dp))
@@ -52,6 +53,7 @@ fun Keyboard(
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
+                    onFlipFinished = { },
                 )
                 if (index < keys.length - 1) {
                     Spacer(modifier = Modifier.width(4.dp))
@@ -71,6 +73,7 @@ fun Keyboard(
                 cellHeight = 32,
                 cellWidth = 42,
                 letterSize = 11,
+                onFlipFinished = { },
             )
             Spacer(modifier = Modifier.width(4.dp))
             for ((index, key) in keys.withIndex()) {
@@ -79,6 +82,7 @@ fun Keyboard(
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
+                    onFlipFinished = { },
                 )
                 if (index < keys.length - 1) {
                     Spacer(modifier = Modifier.width(4.dp))

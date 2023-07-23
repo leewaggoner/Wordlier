@@ -91,19 +91,19 @@ class GameRulesTests : KoinTest {
 
     @Test
     fun handleGuess_Game_Is_Won() {
-        val result = gameRules.handleGuess("TRUST", "TRUST", 1)
-        Assert.assertEquals(GameResult.WIN, result)
+        val result = gameRules.handleGuess("TRUST", "TRUST", 1, listOf())
+        Assert.assertTrue(result is GameResult.Win)
     }
 
     @Test
     fun handleGuess_Game_Is_Lost() {
-        val result = gameRules.handleGuess("TRUST", "FAULT", MAX_GUESSES)
-        Assert.assertEquals(GameResult.LOSS, result)
+        val result = gameRules.handleGuess("TRUST", "FAULT", MAX_GUESSES, listOf())
+        Assert.assertTrue(result is GameResult.Loss)
     }
 
     @Test
     fun handleGuess_Game_Next_Guess() {
-        val result = gameRules.handleGuess("TRUST", "FAULT", 2)
-        Assert.assertEquals(GameResult.NEXT_GUESS, result)
+        val result = gameRules.handleGuess("TRUST", "FAULT", 2, listOf())
+        Assert.assertTrue(result is GameResult.NextGuess)
     }
 }

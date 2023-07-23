@@ -2,7 +2,6 @@ package com.wreckingball.wordlier.domain
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.Color
 import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.ui.theme.NormalCell
@@ -48,19 +47,19 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
         val guess = board[cursor.getRow()].map { it.first }.joinToString(separator = "").trim()
         if (guess.length == MAX_WORD_LENGTH) {
             return if (isValidWord(guess)) {
-                colorLetters(word, guess)
-                val result = gameRules.handleGuess(word, guess, cursor.getRow())
-                if (result == GameResult.NEXT_GUESS) {
+                val coloredWord = gameRules.colorLetters(word, guess)
+                val result = gameRules.handleGuess(word, guess, cursor.getRow(), coloredWord)
+                if (result is GameResult.NextGuess) {
                     cursor.nextRow()
                 }
                 result
             } else {
                 invalidWordUICallback(GameplayState.NotAWord)
-                GameResult.DO_NOTHING
+                GameResult.DoNothing
             }
         } else {
             invalidWordUICallback(GameplayState.ShortWordLength)
-            return GameResult.DO_NOTHING
+            return GameResult.DoNothing
         }
     }
 
@@ -69,9 +68,8 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
         return gameRepo.validateWord(guess)
     }
 
-    private fun colorLetters(word: String, guess: String) {
-        val charList = gameRules.colorLetters(word, guess)
-        board[cursor.getRow()] = charList.toMutableStateList()
+    fun updateLetter(rowIndex: Int, letterIndex: Int, letter: Pair<Char, Color>) {
+        board[rowIndex][letterIndex] = letter
     }
 
     fun handleRemoveLetter() {

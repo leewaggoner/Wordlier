@@ -14,6 +14,9 @@ fun GameBoard(
     guesses: List<List<Pair<Char, Color>>>,
     shakeRow: Int,
     onShakeFinished: () -> Unit,
+    flipRow: Int,
+    flipIndex: Int,
+    onFlipFinished: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -23,6 +26,8 @@ fun GameBoard(
         guesses.forEachIndexed { index, guess ->
             WordRow(
                 shake = shakeRow in 0 until MAX_GUESSES && shakeRow == index,
+                flipIndex = if (flipRow == index) flipIndex else -1,
+                onFlipFinished = onFlipFinished,
                 onShakeFinished = onShakeFinished,
                 guess = guess
             )
@@ -79,6 +84,9 @@ fun GameBoardPreview() {
             ),
         ),
         shakeRow = -1,
-        onShakeFinished = { }
+        onShakeFinished = { },
+        flipRow = -1,
+        flipIndex = -1,
+        onFlipFinished = { },
     )
 }

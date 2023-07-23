@@ -44,6 +44,7 @@ fun Game(
     GameContent(
         state = viewModel.state,
         onShakeFinished = viewModel::onShakeFinished,
+        onFlipFinished = viewModel::onFlipFinished,
         onKeyboardClick = viewModel::onKeyboardClick,
         clearErrorMsg = viewModel::clearErrorMsg,
     )
@@ -53,6 +54,7 @@ fun Game(
 fun GameContent(
     state: GameState,
     onShakeFinished: () -> Unit,
+    onFlipFinished: () -> Unit,
     onKeyboardClick: (String) -> Unit,
     clearErrorMsg: () -> Unit,
 ) {
@@ -87,6 +89,9 @@ fun GameContent(
                         .fillMaxWidth(),
                     shakeRow = state.shakeRow,
                     onShakeFinished = onShakeFinished,
+                    flipRow = state.flipRow,
+                    flipIndex = state.flipIndex,
+                    onFlipFinished = onFlipFinished,
                     guesses = state.board,
                 )
                 Keyboard(
@@ -182,6 +187,7 @@ fun HomeContentPreview() {
             }
         ),
         onShakeFinished = { },
+        onFlipFinished = { },
         onKeyboardClick = { },
         clearErrorMsg = { }
     )
