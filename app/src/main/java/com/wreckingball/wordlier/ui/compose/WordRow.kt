@@ -39,12 +39,11 @@ fun WordRow(
         horizontalArrangement = Arrangement.Center,
     ) {
         for ((index, character) in guess.withIndex()) {
-            CharacterCell(
+            FlippableCharacterCell(
                 letter = character.first.toString(),
                 color = character.second,
                 flip = flipIndex in 0 until MAX_WORD_LENGTH && flipIndex == index,
                 onFlipFinished = onFlipFinished,
-                onClick = { },
             )
             if (index < guess.size - 1) {
                 Spacer(modifier = Modifier.width(8.dp))

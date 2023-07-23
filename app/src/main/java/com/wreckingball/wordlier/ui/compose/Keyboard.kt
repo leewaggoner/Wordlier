@@ -28,12 +28,11 @@ fun Keyboard(
         ) {
             val keys = "QWERTYUIOP"
             for ((index, key) in keys.withIndex()) {
-                CharacterCell(
+                KeyboardCharacterCell(
                     letter = key.toString(),
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
-                    onFlipFinished = { },
                 )
                 if (index < keys.length - 1) {
                     Spacer(modifier = Modifier.width(4.dp))
@@ -48,12 +47,11 @@ fun Keyboard(
         ) {
             val keys = "ASDFGHJKL"
             for ((index, key) in keys.withIndex()) {
-                CharacterCell(
+                KeyboardCharacterCell(
                     letter = key.toString(),
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
-                    onFlipFinished = { },
                 )
                 if (index < keys.length - 1) {
                     Spacer(modifier = Modifier.width(4.dp))
@@ -67,22 +65,20 @@ fun Keyboard(
             horizontalArrangement = Arrangement.Center,
         ) {
             val keys = "ZXCVBNM"
-            CharacterCell(
+            KeyboardCharacterCell(
                 letter = ENTER,
                 onClick = onClick,
                 cellHeight = 32,
                 cellWidth = 42,
                 letterSize = 11,
-                onFlipFinished = { },
             )
             Spacer(modifier = Modifier.width(4.dp))
             for ((index, key) in keys.withIndex()) {
-                CharacterCell(
+                KeyboardCharacterCell(
                     letter = key.toString(),
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
-                    onFlipFinished = { },
                 )
                 if (index < keys.length - 1) {
                     Spacer(modifier = Modifier.width(4.dp))
