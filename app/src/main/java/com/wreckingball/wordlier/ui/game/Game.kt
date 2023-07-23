@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.R
+import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.GameState
 import com.wreckingball.wordlier.ui.compose.GameBoard
 import com.wreckingball.wordlier.ui.compose.Keyboard
@@ -142,46 +143,46 @@ fun HomeContentPreview() {
             board = remember {
                 mutableStateListOf(
                     mutableStateListOf(
-                        Pair('S', NormalCell),
-                        Pair('L', NormalCell),
-                        Pair('A', NormalCell),
-                        Pair('T', NormalCell),
-                        Pair('E', NormalCell),
+                        GameLetter('S', NormalCell),
+                        GameLetter('L', NormalCell),
+                        GameLetter('A', NormalCell),
+                        GameLetter('T', NormalCell),
+                        GameLetter('E', NormalCell),
                     ),
                     mutableStateListOf(
-                        Pair('S', NormalCell),
-                        Pair('L', NormalCell),
-                        Pair('A', NormalCell),
-                        Pair('T', NormalCell),
-                        Pair('E', NormalCell),
+                        GameLetter('S', NormalCell),
+                        GameLetter('L', NormalCell),
+                        GameLetter('A', NormalCell),
+                        GameLetter('T', NormalCell),
+                        GameLetter('E', NormalCell),
                     ),
                     mutableStateListOf(
-                        Pair('S', NormalCell),
-                        Pair('L', NormalCell),
-                        Pair('A', NormalCell),
-                        Pair('T', NormalCell),
-                        Pair('E', NormalCell),
+                        GameLetter('S', NormalCell),
+                        GameLetter('L', NormalCell),
+                        GameLetter('A', NormalCell),
+                        GameLetter('T', NormalCell),
+                        GameLetter('E', NormalCell),
                     ),
                     mutableStateListOf(
-                        Pair('S', NormalCell),
-                        Pair('L', NormalCell),
-                        Pair('A', NormalCell),
-                        Pair('T', NormalCell),
-                        Pair('E', NormalCell),
+                        GameLetter('S', NormalCell),
+                        GameLetter('L', NormalCell),
+                        GameLetter('A', NormalCell),
+                        GameLetter('T', NormalCell),
+                        GameLetter('E', NormalCell),
                     ),
                     mutableStateListOf(
-                        Pair('S', NormalCell),
-                        Pair('L', NormalCell),
-                        Pair('A', NormalCell),
-                        Pair('T', NormalCell),
-                        Pair('E', NormalCell),
+                        GameLetter('S', NormalCell),
+                        GameLetter('L', NormalCell),
+                        GameLetter('A', NormalCell),
+                        GameLetter('T', NormalCell),
+                        GameLetter('E', NormalCell),
                     ),
                     mutableStateListOf(
-                        Pair('S', NormalCell),
-                        Pair('L', NormalCell),
-                        Pair('A', NormalCell),
-                        Pair('T', NormalCell),
-                        Pair('E', NormalCell),
+                        GameLetter('S', NormalCell),
+                        GameLetter('L', NormalCell),
+                        GameLetter('A', NormalCell),
+                        GameLetter('T', NormalCell),
+                        GameLetter('E', NormalCell),
                     ),
                 )
             }

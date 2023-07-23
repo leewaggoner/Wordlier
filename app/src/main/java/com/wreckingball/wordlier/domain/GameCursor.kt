@@ -1,12 +1,14 @@
 package com.wreckingball.wordlier.domain
 
+typealias Cursor = Pair<Int, Int>
+
 enum class Direction {
     FORWARD,
     BACKWARD,
 }
 
 class GameCursor {
-    private var cursor = Pair(0, 0)
+    private var cursor = Cursor(0, 0)
     private var currectDirection = Direction.FORWARD
 
     var atEnd = false
@@ -14,13 +16,13 @@ class GameCursor {
     fun getColumn() = cursor.second
 
     fun reset() {
-        cursor = Pair(0, 0)
+        cursor = Cursor(0, 0)
     }
 
     fun advance() {
         if (cursor.first < MAX_GUESSES) {
             if (cursor.second < MAX_WORD_LENGTH - 1) {
-                cursor = Pair(cursor.first, cursor.second + 1)
+                cursor = Cursor(cursor.first, cursor.second + 1)
             } else {
                 atEnd = true
             }
@@ -31,7 +33,7 @@ class GameCursor {
         atEnd = false
         if (cursor.first >= 0) {
             if (cursor.second > 0) {
-                cursor = Pair(cursor.first, cursor.second - 1)
+                cursor = Cursor(cursor.first, cursor.second - 1)
             }
         }
     }
@@ -59,6 +61,6 @@ class GameCursor {
 
     fun nextRow() {
         atEnd = false
-        cursor = Pair(cursor.first + 1, 0)
+        cursor = Cursor(cursor.first + 1, 0)
     }
 }

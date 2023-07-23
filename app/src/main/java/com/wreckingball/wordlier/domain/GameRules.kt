@@ -1,12 +1,11 @@
 package com.wreckingball.wordlier.domain
 
-import androidx.compose.ui.graphics.Color
 import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 import com.wreckingball.wordlier.ui.theme.WrongLetterCell
 import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 class GameRules {
-    fun colorLetters(word: String, guess: String) : List<Pair<Char, Color>> {
+    fun colorLetters(word: String, guess: String) : List<GameLetter> {
         val characterCount = initCharacterCount(word)
         val guessList = guess.toList()
         val resultList = mutableListOf(
@@ -60,7 +59,7 @@ class GameRules {
         word: String,
         guess: String,
         currentRow: Int,
-        coloredWord: List<Pair<Char, Color>>) : GameResult {
+        coloredWord: List<GameLetter>) : GameResult {
         return if (guess != word) {
             //guess is incorrect
             if (currentRow < MAX_GUESSES - 1) {

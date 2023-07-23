@@ -4,14 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.MAX_GUESSES
 import com.wreckingball.wordlier.ui.theme.NormalCell
 
 @Composable
 fun GameBoard(
-    guesses: List<List<Pair<Char, Color>>>,
+    guesses: List<List<GameLetter>>,
     shakeRow: Int,
     onShakeFinished: () -> Unit,
     flipRow: Int,
@@ -41,46 +41,46 @@ fun GameBoardPreview() {
     GameBoard(
         guesses = listOf(
             listOf(
-                Pair('S', NormalCell),
-                Pair('W', NormalCell),
-                Pair('O', NormalCell),
-                Pair('R', NormalCell),
-                Pair('D', NormalCell),
+                GameLetter('S', NormalCell),
+                GameLetter('W', NormalCell),
+                GameLetter('O', NormalCell),
+                GameLetter('R', NormalCell),
+                GameLetter('D', NormalCell),
             ),
             listOf(
-                Pair('S', NormalCell),
-                Pair('W', NormalCell),
-                Pair('O', NormalCell),
-                Pair('R', NormalCell),
-                Pair('D', NormalCell),
+                GameLetter('S', NormalCell),
+                GameLetter('W', NormalCell),
+                GameLetter('O', NormalCell),
+                GameLetter('R', NormalCell),
+                GameLetter('D', NormalCell),
             ),
             listOf(
-                Pair('S', NormalCell),
-                Pair('W', NormalCell),
-                Pair('O', NormalCell),
-                Pair('R', NormalCell),
-                Pair('D', NormalCell),
+                GameLetter('S', NormalCell),
+                GameLetter('W', NormalCell),
+                GameLetter('O', NormalCell),
+                GameLetter('R', NormalCell),
+                GameLetter('D', NormalCell),
             ),
             listOf(
-                Pair('S', NormalCell),
-                Pair('W', NormalCell),
-                Pair('O', NormalCell),
-                Pair('R', NormalCell),
-                Pair('D', NormalCell),
+                GameLetter('S', NormalCell),
+                GameLetter('W', NormalCell),
+                GameLetter('O', NormalCell),
+                GameLetter('R', NormalCell),
+                GameLetter('D', NormalCell),
             ),
             listOf(
-                Pair('S', NormalCell),
-                Pair('W', NormalCell),
-                Pair('O', NormalCell),
-                Pair('R', NormalCell),
-                Pair('D', NormalCell),
+                GameLetter('S', NormalCell),
+                GameLetter('W', NormalCell),
+                GameLetter('O', NormalCell),
+                GameLetter('R', NormalCell),
+                GameLetter('D', NormalCell),
             ),
             listOf(
-                Pair('S', NormalCell),
-                Pair('W', NormalCell),
-                Pair('O', NormalCell),
-                Pair('R', NormalCell),
-                Pair('D', NormalCell),
+                GameLetter('S', NormalCell),
+                GameLetter('W', NormalCell),
+                GameLetter('O', NormalCell),
+                GameLetter('R', NormalCell),
+                GameLetter('D', NormalCell),
             ),
         ),
         shakeRow = -1,

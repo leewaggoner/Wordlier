@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.MAX_WORD_LENGTH
 import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 import com.wreckingball.wordlier.ui.theme.NormalCell
@@ -23,7 +23,7 @@ fun WordRow(
     onShakeFinished: () -> Unit,
     flipIndex: Int = -1,
     onFlipFinished: () -> Unit,
-    guess: List<Pair<Char, Color>>,
+    guess: List<GameLetter>,
 ) {
     Row(
         modifier = modifier.then(
@@ -62,11 +62,11 @@ fun WordRowPreview() {
         onFlipFinished = { },
         modifier = Modifier.width(800.dp),
         guess = listOf(
-            Pair('W', CorrectLetterCell),
-            Pair('A', WrongLetterCell),
-            Pair('R', WrongPositionCell),
-            Pair('T', NormalCell),
-            Pair('S', NormalCell),
+            GameLetter('W', CorrectLetterCell),
+            GameLetter('A', WrongLetterCell),
+            GameLetter('R', WrongPositionCell),
+            GameLetter('T', NormalCell),
+            GameLetter('S', NormalCell),
         )
     )
 }

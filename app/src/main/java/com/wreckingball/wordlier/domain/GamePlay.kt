@@ -6,13 +6,15 @@ import androidx.compose.ui.graphics.Color
 import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.ui.theme.NormalCell
 
+typealias GameLetter = Pair<Char, Color>
+
 const val MAX_WORD_LENGTH = 5
 const val MAX_GUESSES = 6
 const val ENTER = "ENTER"
 const val BACK = "BACK"
 
 class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, private val gameRules: GameRules) {
-    val board: SnapshotStateList<SnapshotStateList<Pair<Char, Color>>> = mutableStateListOf()
+    val board: SnapshotStateList<SnapshotStateList<GameLetter>> = mutableStateListOf()
     private var invalidWordUICallback: (state: GameplayState) -> Unit = { }
     private var word = "TRUST"
 
@@ -35,10 +37,10 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
         word = gameRepo.getDailyWord()
     }
 
-    private fun initRow() : SnapshotStateList<Pair<Char, Color>> {
-        val row = mutableStateListOf<Pair<Char, Color>>()
+    private fun initRow() : SnapshotStateList<GameLetter> {
+        val row = mutableStateListOf<GameLetter>()
         for (i in 0 until MAX_WORD_LENGTH) {
-            row.add(Pair(' ', NormalCell))
+            row.add(GameLetter(' ', NormalCell))
         }
         return row
     }
@@ -68,7 +70,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
         return gameRepo.validateWord(guess)
     }
 
-    fun updateLetter(rowIndex: Int, letterIndex: Int, letter: Pair<Char, Color>) {
+    fun updateLetter(rowIndex: Int, letterIndex: Int, letter: GameLetter) {
         board[rowIndex][letterIndex] = letter
     }
 
@@ -77,7 +79,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
         //need to back the cursor one extra space
         cursor.didReverse(Direction.BACKWARD, board[cursor.getRow()][MAX_WORD_LENGTH - 1].first == ' ')
 
-        board[cursor.getRow()][cursor.getColumn()] = Pair(' ', NormalCell)
+        board[cursor.getRow()][cursor.getColumn()] = GameLetter(' ', NormalCell)
         cursor.back()
     }
 
@@ -87,7 +89,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
             //we need to advance the cursor one extra space
             cursor.didReverse(Direction.FORWARD, board[cursor.getRow()][0].first != ' ')
 
-            board[cursor.getRow()][cursor.getColumn()] = Pair(character.first(), NormalCell)
+            board[cursor.getRow()][cursor.getColumn()] = GameLetter(character.first(), NormalCell)
             cursor.advance()
         }
     }

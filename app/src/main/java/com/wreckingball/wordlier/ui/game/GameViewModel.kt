@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.domain.BACK
 import com.wreckingball.wordlier.domain.ENTER
+import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.GamePlay
 import com.wreckingball.wordlier.domain.GameResult
 import com.wreckingball.wordlier.domain.GameState
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     var state by mutableStateOf(GameState(gamePlay.board))
-    private var curGuess: List<Pair<Char, Color>>? = null
+    private var curGuess: List<GameLetter>? = null
 
     init {
         gamePlay.initializeGame()
@@ -103,7 +103,7 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         }
     }
 
-    private fun startLetterFlip(curRow: Int, coloredWord: List<Pair<Char, Color>>?) {
+    private fun startLetterFlip(curRow: Int, coloredWord: List<GameLetter>?) {
         curGuess = coloredWord
         curGuess?.let { word ->
             gamePlay.updateLetter(curRow, 0, word[0])
