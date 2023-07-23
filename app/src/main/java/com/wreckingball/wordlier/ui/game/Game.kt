@@ -99,6 +99,7 @@ fun GameContent(
                     modifier = Modifier
                         .padding(top = 32.dp)
                         .fillMaxWidth(),
+                    usedLetters = state.usedLetters,
                     onClick = onKeyboardClick
                 )
             }

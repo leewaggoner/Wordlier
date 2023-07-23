@@ -112,8 +112,15 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     private fun startLetterFlip(curRow: Int, coloredWord: List<GameLetter>?) {
         curGuess = coloredWord
         curGuess?.let { word ->
+            val letterList = state.usedLetters.toMutableList()
+            letterList.addAll(word)
             gamePlay.updateLetter(curRow, 0, word[0])
-            state = state.copy(board = gamePlay.board, flipRow = curRow, flipIndex = 0)
+            state = state.copy(
+                board = gamePlay.board,
+                flipRow = curRow,
+                flipIndex = 0,
+                usedLetters = letterList
+            )
         }
     }
 

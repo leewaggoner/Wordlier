@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 
+private const val ANIM_DURATION = 500
+
 @Composable
 fun FlippableCharacterCell(
     letter: String,
@@ -38,9 +40,9 @@ fun FlippableCharacterCell(
             val result = size.animateTo(
                 targetValue = 1.0f,
                 animationSpec = keyframes {
-                    durationMillis = 600
-                    0.0f at 300 with LinearEasing
-                    1.0f at 600 with LinearEasing
+                    durationMillis = ANIM_DURATION
+                    0.0f at ANIM_DURATION / 2 with LinearEasing
+                    1.0f at ANIM_DURATION with LinearEasing
                 },
             )
             if (result.endReason == AnimationEndReason.Finished) {

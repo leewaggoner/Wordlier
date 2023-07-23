@@ -9,16 +9,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.domain.BACK
 import com.wreckingball.wordlier.domain.ENTER
+import com.wreckingball.wordlier.domain.GameLetter
+import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
+import com.wreckingball.wordlier.ui.theme.WrongLetterCell
+import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 @Composable
 fun Keyboard(
     modifier: Modifier = Modifier,
+    usedLetters: List<GameLetter>,
     onClick: (String) -> Unit,
 ) {
     Column(modifier = modifier) {
@@ -27,9 +33,11 @@ fun Keyboard(
             horizontalArrangement = Arrangement.Center,
         ) {
             val keys = "QWERTYUIOP"
+            val colors = findUsedLetters(keys, usedLetters)
             for ((index, key) in keys.withIndex()) {
                 KeyboardCharacterCell(
                     letter = key.toString(),
+                    color = colors[key] ?: Color.White,
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
@@ -46,9 +54,11 @@ fun Keyboard(
             horizontalArrangement = Arrangement.Center,
         ) {
             val keys = "ASDFGHJKL"
+            val colors = findUsedLetters(keys, usedLetters)
             for ((index, key) in keys.withIndex()) {
                 KeyboardCharacterCell(
                     letter = key.toString(),
+                    color = colors[key] ?: Color.White,
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
@@ -65,6 +75,7 @@ fun Keyboard(
             horizontalArrangement = Arrangement.Center,
         ) {
             val keys = "ZXCVBNM"
+            val colors = findUsedLetters(keys, usedLetters)
             KeyboardCharacterCell(
                 letter = ENTER,
                 onClick = onClick,
@@ -76,6 +87,7 @@ fun Keyboard(
             for ((index, key) in keys.withIndex()) {
                 KeyboardCharacterCell(
                     letter = key.toString(),
+                    color = colors[key] ?: Color.White,
                     onClick = onClick,
                     cellHeight = 32,
                     letterSize = 22,
@@ -94,10 +106,39 @@ fun Keyboard(
     }
 }
 
+private fun  findUsedLetters(keyRow: String, usedLetters: List<GameLetter>) : Map<Char, Color> {
+    val result = mutableMapOf<Char, Color>()
+    usedLetters.forEach { letter ->
+        if (letter.first in keyRow) {
+            if (result[letter.first] == null) {
+                result[letter.first] = letter.second
+            } else {
+                val newColor = letter.second
+                when (result[letter.first]) {
+                    CorrectLetterCell -> { }
+                    WrongPositionCell -> {
+                        if (newColor == CorrectLetterCell) {
+                            result[letter.first] = newColor
+                        }
+                    }
+                    WrongLetterCell -> {
+                        if (newColor == CorrectLetterCell || newColor == WrongPositionCell) {
+                            result[letter.first] = newColor
+                        }
+                    }
+                    else -> result[letter.first] = newColor
+                }
+            }
+        }
+    }
+    return result
+}
+
 @Preview
 @Composable
 fun KeyboardPreview() {
     Keyboard(
-        onClick = { }
+        usedLetters = listOf(),
+        onClick = { },
     )
 }

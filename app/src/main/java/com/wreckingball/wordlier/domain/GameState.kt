@@ -10,4 +10,5 @@ data class GameState(
     val shakeRow: Int = -1,
     val flipRow: Int = -1,
     val flipIndex: Int = -1,
+    val usedLetters: List<GameLetter> = listOf()
 )
