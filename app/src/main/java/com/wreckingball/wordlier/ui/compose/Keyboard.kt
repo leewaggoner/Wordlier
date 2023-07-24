@@ -106,16 +106,9 @@ fun Keyboard(
     }
 }
 
-private object Comp {
-    fun bestColor(a: Color, b: Color) : Color {
-        val colorMap = mapOf(CorrectLetterCell to 3, WrongPositionCell to 2, WrongLetterCell to 1)
-        val color1 = colorMap[a] ?: 1
-        val color2 = colorMap[b] ?: 1
-        return if (color1 > color2) a else b
-    }
-}
-
 private fun  findUsedLetters(keyRow: String, usedLetters: List<GameLetter>) : Map<Char, Color> {
+    val colorMap = mapOf(CorrectLetterCell to 3, WrongPositionCell to 2, WrongLetterCell to 1)
+
     //get list of all letters used in row
     val result = usedLetters.filter { letter ->
         letter.first in keyRow
@@ -124,7 +117,11 @@ private fun  findUsedLetters(keyRow: String, usedLetters: List<GameLetter>) : Ma
         .groupBy({ it.first }, { it.second })
         //filter the duplicate colors so only the best remains
         .mapValues { entry ->
-            entry.value.reduce(Comp::bestColor)
+            entry.value.reduce { acc, color ->
+                val color1 = colorMap[color] ?: 1
+                val color2 = colorMap[acc] ?: 1
+                if (color1 > color2) color else acc
+            }
         }
 
     return result
