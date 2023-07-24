@@ -5,6 +5,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 
 private val DarkColorPalette = darkColorScheme(
         primary = Purple200,
@@ -27,6 +30,14 @@ private val LightColorPalette = lightColorScheme(
     */
 )
 
+val LocalDimensions = staticCompositionLocalOf { Dimensions() }
+
+val MaterialTheme.dimensions
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalDimensions.current
+
+
 @Composable
 fun WordlierTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -38,10 +49,12 @@ fun WordlierTheme(
         LightColorPalette
     }
 
-    MaterialTheme(
+    CompositionLocalProvider(LocalDimensions provides Dimensions()) {
+        MaterialTheme(
             colorScheme = colors,
             typography = Typography,
             shapes = Shapes,
             content = content,
-    )
+        )
+    }
 }

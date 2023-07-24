@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,31 +16,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import com.wreckingball.wordlier.R
+import com.wreckingball.wordlier.ui.theme.dimensions
 
 @Composable
 fun IconCell(
     icon: Painter,
     command: String,
     modifier: Modifier = Modifier,
-    cellHeight: Int = 32,
-    cellWidth: Int = 42,
-    iconHeight: Int = 22,
-    iconWidth: Int = 32,
+    cellHeight: Dp = MaterialTheme.dimensions.KeyboardLetterBoxDims,
+    cellWidth: Dp = MaterialTheme.dimensions.ActionBoxWidth,
+    iconHeight: Dp = MaterialTheme.dimensions.BackIconHeight,
+    iconWidth: Dp = MaterialTheme.dimensions.BackIconWidth,
     color: Color = Color.White,
     onClick: ((String) -> Unit)? = null
 ) {
     Box(
         modifier = modifier.then(
             Modifier
-                .size(cellWidth.dp, cellHeight.dp)
+                .size(cellWidth, cellHeight)
                 .border(
-                    width = 1.dp,
+                    width = MaterialTheme.dimensions.LetterBoxBorderDims,
                     color = Color.Black,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(MaterialTheme.dimensions.LetterBoxCornerDims)
                 )
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimensions.LetterBoxCornerDims))
                 .background(
                     color = color,
                 )
@@ -54,7 +56,7 @@ fun IconCell(
         Icon(
             painter = icon,
             contentDescription = "delete",
-            modifier = Modifier.size(width = iconWidth.dp, height = iconHeight.dp),
+            modifier = Modifier.size(width = iconWidth, height = iconHeight),
         )
     }
 }

@@ -33,7 +33,7 @@ fun FlippableCharacterCell(
         LaunchedEffect(key1 = letter) {
             guessColor.animateTo(
                 targetValue = color,
-                animationSpec = snap(delayMillis = 300)
+                animationSpec = snap(delayMillis = ANIM_DURATION / 2)
             )
         }
         LaunchedEffect(key1 = letter) {

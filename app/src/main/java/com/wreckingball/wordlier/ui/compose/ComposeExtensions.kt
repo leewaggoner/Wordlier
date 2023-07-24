@@ -11,13 +11,15 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.debugInspectorInfo
 
+private const val SHAKE_DURATION = 50
+
 fun Modifier.shake(enabled: Boolean, onAnimationFinished: () -> Unit) = composed(
     factory = {
         val distance by animateFloatAsState(
             targetValue = if (enabled) 15f else 0f,
             animationSpec = repeatable(
                 iterations = 8,
-                animation = tween(durationMillis = 50, easing = LinearEasing),
+                animation = tween(durationMillis = SHAKE_DURATION, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             ),
             finishedListener = { onAnimationFinished() }

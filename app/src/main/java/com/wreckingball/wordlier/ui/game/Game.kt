@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -27,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.GameState
@@ -37,6 +37,7 @@ import com.wreckingball.wordlier.ui.theme.NormalCell
 import com.wreckingball.wordlier.ui.theme.Purple500
 import com.wreckingball.wordlier.ui.theme.Teal200
 import com.wreckingball.wordlier.ui.theme.Typography
+import com.wreckingball.wordlier.ui.theme.dimensions
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -87,7 +88,7 @@ fun GameContent(
                 )
                 GameBoard(
                     modifier = Modifier
-                        .padding(top = 32.dp)
+                        .padding(top = MaterialTheme.dimensions.GameBoardPadding)
                         .fillMaxWidth(),
                     shakeRow = state.shakeRow,
                     onShakeFinished = onShakeFinished,
@@ -98,7 +99,7 @@ fun GameContent(
                 )
                 Keyboard(
                     modifier = Modifier
-                        .padding(top = 32.dp)
+                        .padding(top = MaterialTheme.dimensions.GameBoardPadding)
                         .fillMaxWidth(),
                     usedLetters = state.usedLetters,
                     onClick = onKeyboardClick

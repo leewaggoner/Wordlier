@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,6 +16,7 @@ import com.wreckingball.wordlier.ui.theme.CorrectLetterCell
 import com.wreckingball.wordlier.ui.theme.NormalCell
 import com.wreckingball.wordlier.ui.theme.WrongLetterCell
 import com.wreckingball.wordlier.ui.theme.WrongPositionCell
+import com.wreckingball.wordlier.ui.theme.dimensions
 
 @Composable
 fun WordRow(
@@ -29,10 +31,10 @@ fun WordRow(
         modifier = modifier.then(
             Modifier
                 .padding(
-                start = 8.dp,
-                top = 4.dp,
-                end = 8.dp,
-                bottom = 4.dp,
+                start = MaterialTheme.dimensions.LetterHorizontalPadding,
+                top = MaterialTheme.dimensions.LetterVerticalPadding,
+                end = MaterialTheme.dimensions.LetterHorizontalPadding,
+                bottom = MaterialTheme.dimensions.LetterVerticalPadding,
             )
             .shake(shake) { onShakeFinished() },
         ),
@@ -46,7 +48,7 @@ fun WordRow(
                 onFlipFinished = onFlipFinished,
             )
             if (index < guess.size - 1) {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(MaterialTheme.dimensions.GuessRowPaddingDims))
             }
         }
     }
