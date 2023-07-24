@@ -10,12 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -59,10 +60,10 @@ fun GameContent(
     onKeyboardClick: (String) -> Unit,
     clearErrorMsg: () -> Unit,
 ) {
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
-        scaffoldState = scaffoldState
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -80,7 +81,7 @@ fun GameContent(
                         .fillMaxWidth(),
                     text = stringResource(id = R.string.app_name).uppercase(),
                     textAlign = TextAlign.Center,
-                    style = Typography.h2,
+                    style = Typography.displayMedium,
                     fontWeight = FontWeight.Bold,
                     color = Purple500
                 )
@@ -123,7 +124,7 @@ fun GameContent(
         if (state.errMsgId > 0) {
             val msg = stringResource(id = state.errMsgId)
             LaunchedEffect(key1 = Unit) {
-                val snackbarResult = scaffoldState.snackbarHostState.showSnackbar(
+                val snackbarResult = snackbarHostState.showSnackbar(
                     message = msg,
                     duration = SnackbarDuration.Short,
                 )

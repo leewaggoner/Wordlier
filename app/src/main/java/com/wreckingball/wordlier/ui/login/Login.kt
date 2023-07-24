@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +58,7 @@ fun LoginContent(
     ) {
         Text(
             text = stringResource(id = R.string.app_name),
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.displaySmall
         )
         LoginFields(
             screenState = screenState,
@@ -95,7 +95,7 @@ private fun LoginFields(
         onClick = saveDataAndProceed,
     ) {
         Text(text = stringResource(id = R.string.start_button_text),
-            style = MaterialTheme.typography.button
+            style = MaterialTheme.typography.labelLarge
         )
     }
 }
