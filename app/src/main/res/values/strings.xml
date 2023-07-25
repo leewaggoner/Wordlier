@@ -14,4 +14,10 @@
     <string name="great">Great!</string>
     <string name="whew">Whew!</string>
     <string name="bummer">Bummer! Try again tomorrow.</string>
+    <string name="statistics">STATISTICS</string>
+    <string name="played">Played</string>
+    <string name="winPercent">Win %</string>
+    <string name="currentStreak">Current Streak</string>
+    <string name="maxStreak">Max Streak</string>
+    <string name="guessDistribution">GUESS DISTRIBUTION</string>
 </resources>

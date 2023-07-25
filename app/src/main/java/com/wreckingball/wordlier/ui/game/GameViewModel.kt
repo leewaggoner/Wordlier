@@ -10,6 +10,7 @@ import com.wreckingball.wordlier.domain.ENTER
 import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.GamePlay
 import com.wreckingball.wordlier.domain.GameResult
+import com.wreckingball.wordlier.domain.GameResults
 import com.wreckingball.wordlier.domain.GameState
 import com.wreckingball.wordlier.domain.GameplayState
 import com.wreckingball.wordlier.domain.MAX_WORD_LENGTH
@@ -29,16 +30,29 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         R.string.great,
         R.string.whew,
     )
+    var gameResults: GameResults
 
     init {
         gamePlay.initializeGame()
         gamePlay.registerInvalidWordUICallback { state ->
             handleInvalidWord(state)
         }
+        gameResults = GameResults(
+            guesses = listOf(0, 9, 36, 92, 97, 57),
+            gamesPlayed = 316,
+            winPercent = 92,
+            currentStreak = 4,
+            maxStreak = 36,
+            lastRoundWon = 4,
+        )
     }
+
+    fun getCurrentRound() = gamePlay.getCurrentRow()
 
     private fun handleWin() {
         val curRow = gamePlay.getCurrentRow()
+        saveGameResults()
+        gameResults = getCurrentGameResults()
         state = state.copy(waveRow = curRow, waveIndex = 0, msgId = victoryMsg[curRow])
     }
 
@@ -136,7 +150,7 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         state = if (waveIndex < MAX_WORD_LENGTH) {
             state.copy(waveRow = curRow, waveIndex = waveIndex)
         } else {
-            state.copy(waveRow = -1, waveIndex = -1)
+            state.copy(waveRow = -1, waveIndex = -1, showResults = true)
         }
     }
 
@@ -158,5 +172,33 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
                 state.copy(flipRow = -1, flipIndex = -1)
             }
         }
+    }
+
+    private fun saveGameResults() {
+        //save game results to the GameResultsRepo
+    }
+
+    private fun getCurrentGameResults() : GameResults {
+        //get the current results from the GameResultsRepo
+        val curRow = getCurrentRound()
+        val guesses = gameResults.guesses.toMutableList()
+        guesses[curRow] = guesses[curRow] + 1
+
+        val gamesLost = 6
+        val gamesWon = 316 + 1
+        val winPercent = (gamesLost / gamesWon)
+        val streakBroken = false
+        return GameResults(
+            guesses = guesses,
+            lastRoundWon = curRow,
+            gamesPlayed = gameResults.gamesPlayed + 1,
+            winPercent = winPercent,
+            currentStreak = if (streakBroken) 1 else gameResults.currentStreak + 1,
+            maxStreak = if (gameResults.currentStreak > gameResults.maxStreak) {
+                gameResults.currentStreak
+            } else {
+                gameResults.maxStreak
+            },
+        )
     }
 }

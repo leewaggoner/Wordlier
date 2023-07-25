@@ -12,5 +12,6 @@ data class GameState(
     val waveIndex: Int = -1,
     val flipRow: Int = -1,
     val flipIndex: Int = -1,
-    val usedLetters: List<GameLetter> = listOf()
+    val usedLetters: List<GameLetter> = listOf(),
+    val showResults: Boolean = false,
 )

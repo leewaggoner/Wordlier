@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -18,6 +20,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -28,9 +31,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.GameState
+import com.wreckingball.wordlier.ui.ResultsContent
 import com.wreckingball.wordlier.ui.compose.GameBoard
 import com.wreckingball.wordlier.ui.compose.Keyboard
 import com.wreckingball.wordlier.ui.theme.NormalCell
@@ -40,18 +45,37 @@ import com.wreckingball.wordlier.ui.theme.Typography
 import com.wreckingball.wordlier.ui.theme.dimensions
 import org.koin.androidx.compose.getViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Game(
     viewModel: GameViewModel = getViewModel()
 ) {
-    GameContent(
-        state = viewModel.state,
-        onShakeFinished = viewModel::onShakeFinished,
-        onWaveFinished = viewModel::onWaveFinished,
-        onFlipFinished = viewModel::onFlipFinished,
-        onKeyboardClick = viewModel::onKeyboardClick,
-        clearErrorMsg = viewModel::clearErrorMsg,
-    )
+    val resultsState =  rememberBottomSheetScaffoldState()
+
+    if (viewModel.state.showResults) {
+        LaunchedEffect(key1 = Unit) {
+            resultsState.bottomSheetState.expand()
+        }
+    }
+
+    BottomSheetScaffold(
+        scaffoldState = resultsState,
+        sheetPeekHeight = 32.dp,
+        sheetContent = {
+            ResultsContent(
+                gameResults = viewModel.gameResults,
+            )
+        }
+    ) {
+        GameContent(
+            state = viewModel.state,
+            onShakeFinished = viewModel::onShakeFinished,
+            onWaveFinished = viewModel::onWaveFinished,
+            onFlipFinished = viewModel::onFlipFinished,
+            onKeyboardClick = viewModel::onKeyboardClick,
+            clearErrorMsg = viewModel::clearErrorMsg,
+        )
+    }
 }
 
 @Composable
