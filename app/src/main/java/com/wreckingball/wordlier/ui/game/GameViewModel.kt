@@ -1,6 +1,5 @@
 package com.wreckingball.wordlier.ui.game
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -22,6 +21,14 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     var state by mutableStateOf(GameState(gamePlay.board))
     private var gameResult: GameResult = GameResult.DoNothing
     private var curGuess: List<GameLetter>? = null
+    private var victoryMsg = listOf(
+        R.string.amazing,
+        R.string.incredible,
+        R.string.fantastic,
+        R.string.wellDone,
+        R.string.great,
+        R.string.whew,
+    )
 
     init {
         gamePlay.initializeGame()
@@ -31,11 +38,12 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     }
 
     private fun handleWin() {
-        Log.e("-----LEE-----", "You won!")
+        val curRow = gamePlay.getCurrentRow()
+        state = state.copy(waveRow = curRow, waveIndex = 0, msgId = victoryMsg[curRow])
     }
 
     private fun handleLoss() {
-        Log.e("-----LEE-----", "You lost!")
+        state = state.copy(msgId = R.string.bummer)
     }
 
     private fun handleInvalidWord(gameplayState: GameplayState) {
@@ -45,14 +53,14 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
             GameplayState.NotAWord -> {
                 state = state.copy(
                     loading = false,
-                    errMsgId = R.string.invalidWord,
+                    msgId = R.string.invalidWord,
                     shakeRow = currentRow
                 )
             }
             GameplayState.ShortWordLength -> {
                 state = state.copy(
                     loading = false,
-                    errMsgId = R.string.invalidLength,
+                    msgId = R.string.invalidLength,
                     shakeRow = currentRow
                 )
             }
@@ -61,7 +69,7 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     }
 
     fun clearErrorMsg() {
-        state = state.copy(errMsgId = 0)
+        state = state.copy(msgId = 0)
     }
 
     fun onShakeFinished() {
@@ -87,12 +95,10 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
                         is GameResult.Win -> {
                             state = state.copy(loading = false)
                             startLetterFlip(gamePlay.getCurrentRow(), result.coloredWord)
-                            handleWin()
                         }
                         is GameResult.Loss -> {
                             state = state.copy(loading = false)
                             startLetterFlip(gamePlay.getCurrentRow(), result.coloredWord)
-                            handleLoss()
                         }
                         GameResult.DoNothing -> {}
                     }
@@ -124,6 +130,16 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         }
     }
 
+    fun onWaveFinished() {
+        val waveIndex = state.waveIndex + 1
+        val curRow = state.waveRow
+        state = if (waveIndex < MAX_WORD_LENGTH) {
+            state.copy(waveRow = curRow, waveIndex = waveIndex)
+        } else {
+            state.copy(waveRow = -1, waveIndex = -1)
+        }
+    }
+
     fun onFlipFinished() {
         curGuess?.let { word ->
             val flipIndex = state.flipIndex + 1
@@ -133,6 +149,12 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
                 state.copy(board = gamePlay.board, flipRow = curRow, flipIndex = flipIndex)
             } else {
                 curGuess = null
+                if (gameResult is GameResult.Win) {
+                    //handle win
+                    handleWin()
+                } else if (gameResult is GameResult.Loss) {
+                    handleLoss()
+                }
                 state.copy(flipRow = -1, flipIndex = -1)
             }
         }

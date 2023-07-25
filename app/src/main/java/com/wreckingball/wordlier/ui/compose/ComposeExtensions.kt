@@ -16,7 +16,7 @@ private const val SHAKE_DURATION = 50
 fun Modifier.shake(enabled: Boolean, onAnimationFinished: () -> Unit) = composed(
     factory = {
         val distance by animateFloatAsState(
-            targetValue = if (enabled) 15f else 0f,
+            targetValue = if (enabled) 15.0f else 0.0f,
             animationSpec = repeatable(
                 iterations = 8,
                 animation = tween(durationMillis = SHAKE_DURATION, easing = LinearEasing),
@@ -25,7 +25,7 @@ fun Modifier.shake(enabled: Boolean, onAnimationFinished: () -> Unit) = composed
             finishedListener = { onAnimationFinished() }
         )
         Modifier.graphicsLayer {
-            translationX = if (enabled) distance else 0f
+            translationX = if (enabled) distance else 0.0f
         }
     },
     inspectorInfo = debugInspectorInfo {

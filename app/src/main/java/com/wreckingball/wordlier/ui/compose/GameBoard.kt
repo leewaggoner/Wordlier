@@ -14,6 +14,9 @@ fun GameBoard(
     guesses: List<List<GameLetter>>,
     shakeRow: Int,
     onShakeFinished: () -> Unit,
+    waveRow: Int,
+    waveIndex: Int,
+    onWaveFinished: () -> Unit,
     flipRow: Int,
     flipIndex: Int,
     onFlipFinished: () -> Unit,
@@ -26,10 +29,12 @@ fun GameBoard(
         guesses.forEachIndexed { index, guess ->
             WordRow(
                 shake = shakeRow in 0 until MAX_GUESSES && shakeRow == index,
+                onShakeFinished = onShakeFinished,
+                waveIndex = if (waveRow == index) waveIndex else -1,
+                onWaveFinished = onWaveFinished,
                 flipIndex = if (flipRow == index) flipIndex else -1,
                 onFlipFinished = onFlipFinished,
-                onShakeFinished = onShakeFinished,
-                guess = guess
+                guess = guess,
             )
         }
     }
@@ -85,6 +90,9 @@ fun GameBoardPreview() {
         ),
         shakeRow = -1,
         onShakeFinished = { },
+        waveRow = -1,
+        waveIndex = -1,
+        onWaveFinished = { },
         flipRow = -1,
         flipIndex = -1,
         onFlipFinished = { },

@@ -47,6 +47,7 @@ fun Game(
     GameContent(
         state = viewModel.state,
         onShakeFinished = viewModel::onShakeFinished,
+        onWaveFinished = viewModel::onWaveFinished,
         onFlipFinished = viewModel::onFlipFinished,
         onKeyboardClick = viewModel::onKeyboardClick,
         clearErrorMsg = viewModel::clearErrorMsg,
@@ -57,6 +58,7 @@ fun Game(
 fun GameContent(
     state: GameState,
     onShakeFinished: () -> Unit,
+    onWaveFinished: () -> Unit,
     onFlipFinished: () -> Unit,
     onKeyboardClick: (String) -> Unit,
     clearErrorMsg: () -> Unit,
@@ -92,6 +94,9 @@ fun GameContent(
                         .fillMaxWidth(),
                     shakeRow = state.shakeRow,
                     onShakeFinished = onShakeFinished,
+                    waveRow = state.waveRow,
+                    waveIndex = state.waveIndex,
+                    onWaveFinished = onWaveFinished,
                     flipRow = state.flipRow,
                     flipIndex = state.flipIndex,
                     onFlipFinished = onFlipFinished,
@@ -122,8 +127,8 @@ fun GameContent(
             }
         }
 
-        if (state.errMsgId > 0) {
-            val msg = stringResource(id = state.errMsgId)
+        if (state.msgId > 0) {
+            val msg = stringResource(id = state.msgId)
             LaunchedEffect(key1 = Unit) {
                 val snackbarResult = snackbarHostState.showSnackbar(
                     message = msg,
@@ -191,6 +196,7 @@ fun HomeContentPreview() {
             }
         ),
         onShakeFinished = { },
+        onWaveFinished = { },
         onFlipFinished = { },
         onKeyboardClick = { },
         clearErrorMsg = { }

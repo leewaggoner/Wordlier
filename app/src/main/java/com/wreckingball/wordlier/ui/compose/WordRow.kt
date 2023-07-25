@@ -23,6 +23,8 @@ fun WordRow(
     modifier: Modifier = Modifier,
     shake: Boolean,
     onShakeFinished: () -> Unit,
+    waveIndex: Int,
+    onWaveFinished: () -> Unit,
     flipIndex: Int = -1,
     onFlipFinished: () -> Unit,
     guess: List<GameLetter>,
@@ -44,6 +46,8 @@ fun WordRow(
             FlippableCharacterCell(
                 letter = character.first.toString(),
                 color = character.second,
+                wave = waveIndex in 0 until MAX_WORD_LENGTH && waveIndex == index,
+                onWaveFinished = onWaveFinished,
                 flip = flipIndex in 0 until MAX_WORD_LENGTH && flipIndex == index,
                 onFlipFinished = onFlipFinished,
             )
@@ -60,6 +64,8 @@ fun WordRowPreview() {
     WordRow(
         shake = false,
         onShakeFinished = { },
+        waveIndex = -1,
+        onWaveFinished = { },
         onFlipFinished = { },
         modifier = Modifier.width(800.dp),
         guess = listOf(
