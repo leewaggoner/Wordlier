@@ -38,7 +38,7 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
             handleInvalidWord(state)
         }
         gameResults = GameResults(
-            guesses = listOf(0, 9, 36, 92, 97, 57),
+            winsPerRound = listOf(0, 9, 36, 92, 97, 57),
             gamesPlayed = 316,
             winPercent = 92,
             currentStreak = 4,
@@ -181,15 +181,15 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
     private fun getCurrentGameResults() : GameResults {
         //get the current results from the GameResultsRepo
         val curRow = getCurrentRound()
-        val guesses = gameResults.guesses.toMutableList()
-        guesses[curRow] = guesses[curRow] + 1
+        val winsPerRound = gameResults.winsPerRound.toMutableList()
+        winsPerRound[curRow] = winsPerRound[curRow] + 1
 
         val gamesLost = 6
         val gamesWon = 316 + 1
         val winPercent = (gamesLost / gamesWon)
         val streakBroken = false
         return GameResults(
-            guesses = guesses,
+            winsPerRound = winsPerRound,
             lastRoundWon = curRow,
             gamesPlayed = gameResults.gamesPlayed + 1,
             winPercent = winPercent,

@@ -1,8 +1,8 @@
 package com.wreckingball.wordlier.domain
 
 data class GameResults(
-    val guesses: List<Int>,
-    val maxGuesses: Int = guesses.max(),
+    val winsPerRound: List<Int>,
+    val maxWins: Int = winsPerRound.max(),
     val gamesPlayed: Int,
     val winPercent: Int,
     val currentStreak: Int,

@@ -43,7 +43,7 @@ fun StatsBox(
 @Composable
 fun StatsBoxPreview() {
     val results = GameResults(
-        guesses = listOf(0, 9, 36, 92, 97, 57),
+        winsPerRound = listOf(0, 9, 36, 92, 97, 57),
         gamesPlayed = 316,
         winPercent = 92,
         currentStreak = 4,
