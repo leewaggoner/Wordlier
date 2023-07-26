@@ -27,7 +27,7 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     }
 
     private fun loadName() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             val name = playerRepo.getPlayerName()
             state = state.copy(name = name, buttonEnabled = name.isNotEmpty())
         }

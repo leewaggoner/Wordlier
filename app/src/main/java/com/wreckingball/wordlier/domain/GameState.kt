@@ -14,4 +14,5 @@ data class GameState(
     val flipIndex: Int = -1,
     val usedLetters: List<GameLetter> = listOf(),
     val showResults: Boolean = false,
+    val resultsUpdated: Boolean = false,
 )

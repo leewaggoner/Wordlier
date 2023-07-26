@@ -62,9 +62,13 @@ fun Game(
         scaffoldState = resultsState,
         sheetPeekHeight = 32.dp,
         sheetContent = {
-            ResultsContent(
-                gameResults = viewModel.gameResults,
-            )
+            if (viewModel.state.resultsUpdated) {
+                viewModel.gameResults?.let { results ->
+                    ResultsContent(
+                        gameResults = results,
+                    )
+                }
+            }
         }
     ) {
         GameContent(
@@ -73,8 +77,21 @@ fun Game(
             onWaveFinished = viewModel::onWaveFinished,
             onFlipFinished = viewModel::onFlipFinished,
             onKeyboardClick = viewModel::onKeyboardClick,
-            clearErrorMsg = viewModel::clearErrorMsg,
         )
+
+        if (viewModel.state.msgId > 0) {
+            val msg = stringResource(id = viewModel.state.msgId)
+            LaunchedEffect(key1 = Unit) {
+                val snackbarResult = resultsState.snackbarHostState.showSnackbar(
+                    message = msg,
+                    duration = SnackbarDuration.Short,
+                )
+                when (snackbarResult) {
+                    SnackbarResult.Dismissed -> viewModel.clearErrorMsg()
+                    else -> { }
+                }
+            }
+        }
     }
 }
 
@@ -85,7 +102,6 @@ fun GameContent(
     onWaveFinished: () -> Unit,
     onFlipFinished: () -> Unit,
     onKeyboardClick: (String) -> Unit,
-    clearErrorMsg: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -150,20 +166,6 @@ fun GameContent(
                 CircularProgressIndicator()
             }
         }
-
-        if (state.msgId > 0) {
-            val msg = stringResource(id = state.msgId)
-            LaunchedEffect(key1 = Unit) {
-                val snackbarResult = snackbarHostState.showSnackbar(
-                    message = msg,
-                    duration = SnackbarDuration.Short,
-                )
-                when (snackbarResult) {
-                    SnackbarResult.Dismissed -> clearErrorMsg()
-                    else -> { }
-                }
-            }
-        }
     }
 }
 
@@ -223,6 +225,5 @@ fun HomeContentPreview() {
         onWaveFinished = { },
         onFlipFinished = { },
         onKeyboardClick = { },
-        clearErrorMsg = { }
     )
 }

@@ -16,7 +16,7 @@ import com.wreckingball.wordlier.ui.theme.dimensions
 fun KeyboardCharacterCell(
     letter: String,
     modifier: Modifier = Modifier,
-    color: Color = Color.White,
+    color: Color = Color.LightGray,
     cellHeight: Dp = MaterialTheme.dimensions.KeyboardLetterBoxDims,
     cellWidth: Dp = cellHeight,
     letterSize: TextUnit = MaterialTheme.dimensions.KeyboardTextSize,

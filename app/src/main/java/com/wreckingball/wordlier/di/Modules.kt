@@ -14,6 +14,7 @@ import com.wreckingball.wordlier.domain.GamePlay
 import com.wreckingball.wordlier.domain.GameRules
 import com.wreckingball.wordlier.network.WordValidationService
 import com.wreckingball.wordlier.repositories.GameRepo
+import com.wreckingball.wordlier.repositories.GameResultsRepo
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.game.GameViewModel
 import com.wreckingball.wordlier.ui.login.LoginViewModel
@@ -37,10 +38,16 @@ private const val WRITE_TIMEOUT = 30L
 
 val appModule = module {
     viewModel { LoginViewModel(playerRepo = get()) }
-    viewModel { GameViewModel(gamePlay = get()) }
+    viewModel {
+        GameViewModel(
+            gamePlay = get(),
+            gameResultsRepo = get(),
+        )
+    }
 
     factory { PlayerRepo(dataStore = get()) }
     factory { GameRepo(wordValidationService = get()) }
+    factory { GameResultsRepo(dataStore = get()) }
     factory { GameRules() }
     single {
         GamePlay(

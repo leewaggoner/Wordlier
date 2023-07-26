@@ -38,7 +38,7 @@ fun Keyboard(
             for ((index, key) in keys.withIndex()) {
                 KeyboardCharacterCell(
                     letter = key.toString(),
-                    color = colors[key] ?: Color.White,
+                    color = colors[key] ?: Color.LightGray,
                     onClick = onClick,
                 )
                 if (index < keys.length - 1) {
@@ -61,7 +61,7 @@ fun Keyboard(
             for ((index, key) in keys.withIndex()) {
                 KeyboardCharacterCell(
                     letter = key.toString(),
-                    color = colors[key] ?: Color.White,
+                    color = colors[key] ?: Color.LightGray,
                     onClick = onClick,
                 )
                 if (index < keys.length - 1) {
@@ -91,7 +91,7 @@ fun Keyboard(
             for ((index, key) in keys.withIndex()) {
                 KeyboardCharacterCell(
                     letter = key.toString(),
-                    color = colors[key] ?: Color.White,
+                    color = colors[key] ?: Color.LightGray,
                     onClick = onClick,
                 )
                 if (index < keys.length - 1) {

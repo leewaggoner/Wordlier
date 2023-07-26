@@ -29,7 +29,7 @@ fun IconCell(
     cellWidth: Dp = MaterialTheme.dimensions.ActionBoxWidth,
     iconHeight: Dp = MaterialTheme.dimensions.BackIconHeight,
     iconWidth: Dp = MaterialTheme.dimensions.BackIconWidth,
-    color: Color = Color.White,
+    color: Color = Color.LightGray,
     onClick: ((String) -> Unit)? = null
 ) {
     Box(

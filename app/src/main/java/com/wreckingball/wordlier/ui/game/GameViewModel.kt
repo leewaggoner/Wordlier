@@ -14,11 +14,15 @@ import com.wreckingball.wordlier.domain.GameResults
 import com.wreckingball.wordlier.domain.GameState
 import com.wreckingball.wordlier.domain.GameplayState
 import com.wreckingball.wordlier.domain.MAX_WORD_LENGTH
+import com.wreckingball.wordlier.repositories.GameResultsRepo
 import com.wreckingball.wordlier.ui.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
+class GameViewModel(
+    private val gamePlay: GamePlay,
+    private val gameResultsRepo: GameResultsRepo,
+) : BaseViewModel() {
     var state by mutableStateOf(GameState(gamePlay.board))
     private var gameResult: GameResult = GameResult.DoNothing
     private var curGuess: List<GameLetter>? = null
@@ -30,34 +34,29 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         R.string.great,
         R.string.whew,
     )
-    var gameResults: GameResults
+    var gameResults: GameResults? = null
 
     init {
         gamePlay.initializeGame()
         gamePlay.registerInvalidWordUICallback { state ->
             handleInvalidWord(state)
         }
-        gameResults = GameResults(
-            winsPerRound = listOf(0, 9, 36, 92, 97, 57),
-            gamesPlayed = 316,
-            winPercent = 92,
-            currentStreak = 4,
-            maxStreak = 36,
-            lastRoundWon = 4,
-        )
+        viewModelScope.launch(Dispatchers.Main) {
+            gameResultsRepo.clearAll()
+            getCurrentGameResults()
+        }
     }
-
-    fun getCurrentRound() = gamePlay.getCurrentRow()
 
     private fun handleWin() {
         val curRow = gamePlay.getCurrentRow()
-        saveGameResults()
-        gameResults = getCurrentGameResults()
+        updateGameResults()
         state = state.copy(waveRow = curRow, waveIndex = 0, msgId = victoryMsg[curRow])
     }
 
     private fun handleLoss() {
-        state = state.copy(msgId = R.string.bummer)
+        val curRow = gamePlay.getCurrentRow()
+        updateGameResults()
+        state = state.copy(waveRow = curRow, waveIndex = 0, msgId = R.string.bummer)
     }
 
     private fun handleInvalidWord(gameplayState: GameplayState) {
@@ -174,31 +173,19 @@ class GameViewModel(private val gamePlay: GamePlay) : BaseViewModel() {
         }
     }
 
-    private fun saveGameResults() {
-        //save game results to the GameResultsRepo
+    private fun updateGameResults() {
+        viewModelScope.launch(Dispatchers.Main) {
+            saveGameResults()
+            getCurrentGameResults()
+        }
     }
 
-    private fun getCurrentGameResults() : GameResults {
-        //get the current results from the GameResultsRepo
-        val curRow = getCurrentRound()
-        val winsPerRound = gameResults.winsPerRound.toMutableList()
-        winsPerRound[curRow] = winsPerRound[curRow] + 1
+    private suspend fun saveGameResults() {
+        gameResultsRepo.updateGameResults(gameResult is GameResult.Win, gamePlay.getCurrentRow())
+    }
 
-        val gamesLost = 6
-        val gamesWon = 316 + 1
-        val winPercent = (gamesLost / gamesWon)
-        val streakBroken = false
-        return GameResults(
-            winsPerRound = winsPerRound,
-            lastRoundWon = curRow,
-            gamesPlayed = gameResults.gamesPlayed + 1,
-            winPercent = winPercent,
-            currentStreak = if (streakBroken) 1 else gameResults.currentStreak + 1,
-            maxStreak = if (gameResults.currentStreak > gameResults.maxStreak) {
-                gameResults.currentStreak
-            } else {
-                gameResults.maxStreak
-            },
-        )
+    private suspend fun getCurrentGameResults() {
+        gameResults = gameResultsRepo.getGameResults()
+        state = state.copy(resultsUpdated = true)
     }
 }
