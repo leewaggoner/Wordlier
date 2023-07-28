@@ -1,20 +1,22 @@
 package com.wreckingball.wordlier.ui.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.domain.GameResults
+import com.wreckingball.wordlier.ui.theme.CurResultBarColor
 import com.wreckingball.wordlier.ui.theme.ResultBarColor
 
 @Composable
@@ -23,7 +25,8 @@ fun GuessDistribution(
     round: Int,
     maxWins: Int,
     wins: Int,
-    barColor: Color,
+    roundWon: Boolean,
+    barColor: Color = if (roundWon) CurResultBarColor else ResultBarColor,
 ) {
     Row(
         modifier = modifier.then(
@@ -38,27 +41,22 @@ fun GuessDistribution(
             text = round.toString(),
             style = MaterialTheme.typography.labelSmall,
         )
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Box(modifier = Modifier
                 .fillMaxWidth(getFillPercent(wins, maxWins))
-                .fillMaxSize()
-                .background(barColor)
-            )
-            Box(
+                .background(barColor),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            val scope = this
+            Text(
                 modifier = Modifier
-                    .background(barColor),
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp),
-                    text = wins.toString(),
-                    color = Color.White,
-                    style = MaterialTheme.typography.labelSmall,
-                )
-            }
+                    .wrapContentWidth(unbounded = true, align = Alignment.Start)
+                    .background(barColor)
+                    .padding(horizontal = 4.dp),
+                text = wins.toString(),
+                color = Color.White,
+                style = MaterialTheme.typography.labelSmall,
+            )
         }
     }
 }
@@ -86,7 +84,7 @@ fun GuessDistributionPreview() {
     GuessDistribution(
         round = 1,
         maxWins = results.maxWins,
-        wins = results.winsPerRound[1],
-        barColor = ResultBarColor
+        wins = results.winsPerRound[5],
+        roundWon = false,
     )
 }

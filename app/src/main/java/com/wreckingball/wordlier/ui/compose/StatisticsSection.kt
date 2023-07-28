@@ -35,7 +35,7 @@ fun StatisticsSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             StatsBox(
                 statNumber = gameResults.gamesPlayed,

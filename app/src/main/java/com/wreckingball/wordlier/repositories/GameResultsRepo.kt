@@ -51,8 +51,9 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
             }
         } else {
             //could not find a date, it's probably the first game ever
-            updateStreakData(todayString, 0)
+            updateStreakData(todayString, 1)
             dataStore.putMaxStreak(1)
+            updated = true
         }
         return updated
     }

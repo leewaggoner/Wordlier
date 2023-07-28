@@ -11,8 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingball.wordlier.R
 import com.wreckingball.wordlier.domain.GameResults
-import com.wreckingball.wordlier.ui.theme.CurResultBarColor
-import com.wreckingball.wordlier.ui.theme.ResultBarColor
 
 @Composable
 fun GuessDistributionSection(
@@ -36,11 +34,7 @@ fun GuessDistributionSection(
                 round = index + 1,
                 maxWins = gameResults.maxWins,
                 wins = i,
-                barColor = if (index == gameResults.lastRoundWon) {
-                    CurResultBarColor
-                } else {
-                    ResultBarColor
-                }
+                roundWon = (index == gameResults.lastRoundWon),
             )
         }
     }
