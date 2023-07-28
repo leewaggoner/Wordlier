@@ -43,7 +43,7 @@ class GameViewModel(
             handleInvalidWord(state)
         }
         viewModelScope.launch(Dispatchers.Main) {
-            gameResultsRepo.clearAll()
+//            gameResultsRepo.clearAll()
             getCurrentGameResults()
         }
     }
@@ -143,7 +143,6 @@ class GameViewModel(
                 board = gamePlay.board,
                 flipRow = curRow,
                 flipIndex = 0,
-                usedLetters = letterList,
             )
         }
     }
@@ -166,14 +165,17 @@ class GameViewModel(
                 gamePlay.updateLetter(curRow, flipIndex, word[flipIndex])
                 state.copy(board = gamePlay.board, flipRow = curRow, flipIndex = flipIndex)
             } else {
-                curGuess = null
                 if (gameResult is GameResult.Win) {
                     //handle win
                     handleWin()
                 } else if (gameResult is GameResult.Loss) {
                     handleLoss()
                 }
-                state.copy(flipRow = -1, flipIndex = -1)
+                val letterList = state.usedLetters.toMutableList()
+                letterList.addAll(word)
+                letterList.toList()
+                curGuess = null
+                state.copy(flipRow = -1, flipIndex = -1, usedLetters = letterList)
             }
         }
     }

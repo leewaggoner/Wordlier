@@ -9,10 +9,15 @@ import java.util.Locale
 
 class GameResultsRepo(private val dataStore: DataStoreWrapper) {
     suspend fun updateGameResults(won: Boolean, curRound: Int) {
-        updateStreak()
-        updateWin(won, curRound)
+        val updatedStreak = updateStreak()
+        if (updatedStreak) {
+            // this is the second time the game has been played or something went very wrong with
+            // the data -- in either case don't update the win data
+            updateWin(won, curRound)
+        }
     }
-    private suspend fun updateStreak() {
+    private suspend fun updateStreak() : Boolean {
+        var updated = false
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         val todayString = sdf.format(Date())
@@ -22,19 +27,23 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
         if (lastDatePlayedString.isNotEmpty()) {
             val date = sdf.parse(lastDatePlayedString)
             if (date != null) {
-                if (DateUtils.isToday(date.time + DateUtils.DAY_IN_MILLIS)) {
-                    //last date played was yesterday, streak continues
-                    val continuedStreak = streak + 1
-                    updateStreakData(todayString, continuedStreak)
+                // if the date last played is today, do nothing
+                if (!DateUtils.isToday(date.time)) {
+                    if (DateUtils.isToday(date.time + DateUtils.DAY_IN_MILLIS)) {
+                        //last date played was yesterday, streak continues
+                        val continuedStreak = streak + 1
+                        updateStreakData(todayString, continuedStreak)
 
-                    //update max streak
-                    val maxStreak = dataStore.getMaxStreak(0)
-                    if (continuedStreak > maxStreak) {
-                        dataStore.putMaxStreak(maxStreak + 1)
+                        //update max streak
+                        val maxStreak = dataStore.getMaxStreak(0)
+                        if (continuedStreak > maxStreak) {
+                            dataStore.putMaxStreak(maxStreak + 1)
+                        }
+                    } else {
+                        //streak is broken
+                        updateStreakData(todayString, 0)
                     }
-                } else {
-                    //streak is broken
-                    updateStreakData(todayString, 0)
+                    updated = true
                 }
             } else {
                 //invalid date, treat as broken streak
@@ -45,6 +54,7 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
             updateStreakData(todayString, 0)
             dataStore.putMaxStreak(1)
         }
+        return updated
     }
 
     private suspend fun updateStreakData(date: String, streak: Int) {
@@ -68,6 +78,7 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
         } else {
             val totalLosses = dataStore.getTotalLosses(0)
             dataStore.putTotalLosses(totalLosses + 1)
+            dataStore.putLastRoundWon(-1)
         }
     }
 
@@ -85,7 +96,7 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
         }
         val currentStreak = dataStore.getStreak(0)
         val maxStreak = dataStore.getMaxStreak(0)
-        val lastRoundWon = dataStore.getLastRoundWon(0)
+        val lastRoundWon = dataStore.getLastRoundWon(-1)
         return GameResults(
             winsPerRound = winsPerRound,
             gamesPlayed = gamesPlayed,
