@@ -1,5 +1,6 @@
 package com.wreckingball.wordlier.ui.game
 
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,7 +31,7 @@ class GameViewModel(
         R.string.amazing,
         R.string.incredible,
         R.string.fantastic,
-        R.string.wellDone,
+        R.string.splendid,
         R.string.great,
         R.string.whew,
     )
@@ -54,9 +55,13 @@ class GameViewModel(
     }
 
     private fun handleLoss() {
-        val curRow = gamePlay.getCurrentRow()
         updateGameResults()
-        state = state.copy(waveRow = curRow, waveIndex = 0, msgId = R.string.bummer)
+        state = state.copy(
+            msgId = R.string.bummer,
+            msg = gamePlay.getCurrentWord(),
+            msgDuration = SnackbarDuration.Indefinite,
+            showResults = true,
+        )
     }
 
     private fun handleInvalidWord(gameplayState: GameplayState) {
@@ -67,14 +72,14 @@ class GameViewModel(
                 state = state.copy(
                     loading = false,
                     msgId = R.string.invalidWord,
-                    shakeRow = currentRow
+                    shakeRow = currentRow,
                 )
             }
             GameplayState.ShortWordLength -> {
                 state = state.copy(
                     loading = false,
                     msgId = R.string.invalidLength,
-                    shakeRow = currentRow
+                    shakeRow = currentRow,
                 )
             }
             else -> {}
@@ -82,7 +87,7 @@ class GameViewModel(
     }
 
     fun clearErrorMsg() {
-        state = state.copy(msgId = 0)
+        state = state.copy(msgId = 0, msg = "")
     }
 
     fun onShakeFinished() {
@@ -138,7 +143,7 @@ class GameViewModel(
                 board = gamePlay.board,
                 flipRow = curRow,
                 flipIndex = 0,
-                usedLetters = letterList
+                usedLetters = letterList,
             )
         }
     }

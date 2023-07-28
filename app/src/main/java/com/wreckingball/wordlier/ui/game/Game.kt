@@ -14,10 +14,6 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -80,11 +76,15 @@ fun Game(
         )
 
         if (viewModel.state.msgId > 0) {
-            val msg = stringResource(id = viewModel.state.msgId)
+            val msg = if (viewModel.state.msg.isNotEmpty()) {
+                viewModel.state.msg
+            } else {
+                stringResource(id = viewModel.state.msgId)
+            }
             LaunchedEffect(key1 = Unit) {
                 val snackbarResult = resultsState.snackbarHostState.showSnackbar(
                     message = msg,
-                    duration = SnackbarDuration.Short,
+                    duration = viewModel.state.msgDuration,
                 )
                 when (snackbarResult) {
                     SnackbarResult.Dismissed -> viewModel.clearErrorMsg()
@@ -103,68 +103,61 @@ fun GameContent(
     onFlipFinished: () -> Unit,
     onKeyboardClick: (String) -> Unit,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { padding ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Teal200),
+    ) {
         Column(
             modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .background(color = Teal200),
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
+            Text(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    text = stringResource(id = R.string.app_name).uppercase(),
-                    textAlign = TextAlign.Center,
-                    style = Typography.displayMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Purple500
-                )
-                GameBoard(
-                    modifier = Modifier
-                        .padding(top = MaterialTheme.dimensions.GameBoardPadding)
-                        .fillMaxWidth(),
-                    shakeRow = state.shakeRow,
-                    onShakeFinished = onShakeFinished,
-                    waveRow = state.waveRow,
-                    waveIndex = state.waveIndex,
-                    onWaveFinished = onWaveFinished,
-                    flipRow = state.flipRow,
-                    flipIndex = state.flipIndex,
-                    onFlipFinished = onFlipFinished,
-                    guesses = state.board,
-                )
-                Keyboard(
-                    modifier = Modifier
-                        .padding(top = MaterialTheme.dimensions.GameBoardPadding)
-                        .fillMaxWidth(),
-                    usedLetters = state.usedLetters,
-                    onClick = onKeyboardClick
-                )
-            }
+                    .fillMaxWidth(),
+                text = stringResource(id = R.string.app_name).uppercase(),
+                textAlign = TextAlign.Center,
+                style = Typography.displayMedium,
+                fontWeight = FontWeight.Bold,
+                color = Purple500
+            )
+            GameBoard(
+                modifier = Modifier
+                    .padding(top = MaterialTheme.dimensions.GameBoardPadding)
+                    .fillMaxWidth(),
+                shakeRow = state.shakeRow,
+                onShakeFinished = onShakeFinished,
+                waveRow = state.waveRow,
+                waveIndex = state.waveIndex,
+                onWaveFinished = onWaveFinished,
+                flipRow = state.flipRow,
+                flipIndex = state.flipIndex,
+                onFlipFinished = onFlipFinished,
+                guesses = state.board,
+            )
+            Keyboard(
+                modifier = Modifier
+                    .padding(top = MaterialTheme.dimensions.GameBoardPadding)
+                    .fillMaxWidth(),
+                usedLetters = state.usedLetters,
+                onClick = onKeyboardClick
+            )
         }
+    }
 
-        if (state.loading) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = { },
-                    )
-            ) {
-                CircularProgressIndicator()
-            }
+    if (state.loading) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = { },
+                )
+        ) {
+            CircularProgressIndicator()
         }
     }
 }

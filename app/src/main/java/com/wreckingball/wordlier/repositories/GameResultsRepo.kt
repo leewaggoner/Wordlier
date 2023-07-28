@@ -34,15 +34,15 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
                     }
                 } else {
                     //streak is broken
-                    updateStreakData(todayString, 1)
+                    updateStreakData(todayString, 0)
                 }
             } else {
                 //invalid date, treat as broken streak
-                updateStreakData(todayString, 1)
+                updateStreakData(todayString, 0)
             }
         } else {
             //could not find a date, it's probably the first game ever
-            updateStreakData(todayString, 1)
+            updateStreakData(todayString, 0)
             dataStore.putMaxStreak(1)
         }
     }

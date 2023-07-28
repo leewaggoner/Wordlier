@@ -20,6 +20,8 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
 
     fun getCurrentRow() = cursor.getRow()
 
+    fun getCurrentWord() = word
+
     fun registerInvalidWordUICallback(callback: (state: GameplayState) -> Unit) {
         invalidWordUICallback = callback
     }

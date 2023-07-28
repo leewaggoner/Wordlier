@@ -31,7 +31,7 @@ fun ResultsContent (
 
         GuessDistributionSection(
             modifier = Modifier
-                .padding(bottom = 8.dp),
+                .padding(bottom = 56.dp),
             gameResults = gameResults,
         )
     }
