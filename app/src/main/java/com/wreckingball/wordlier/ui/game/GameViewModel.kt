@@ -11,7 +11,6 @@ import com.wreckingball.wordlier.domain.ENTER
 import com.wreckingball.wordlier.domain.GameLetter
 import com.wreckingball.wordlier.domain.GamePlay
 import com.wreckingball.wordlier.domain.GameResult
-import com.wreckingball.wordlier.domain.GameResults
 import com.wreckingball.wordlier.domain.GameState
 import com.wreckingball.wordlier.domain.GameplayState
 import com.wreckingball.wordlier.domain.MAX_WORD_LENGTH
@@ -35,7 +34,6 @@ class GameViewModel(
         R.string.great,
         R.string.whew,
     )
-    var gameResults: GameResults? = null
 
     init {
         gamePlay.initializeGame()
@@ -49,19 +47,23 @@ class GameViewModel(
     }
 
     private fun handleWin() {
-        val curRow = gamePlay.getCurrentRow()
-        updateGameResults()
-        state = state.copy(waveRow = curRow, waveIndex = 0, msgId = victoryMsg[curRow])
+        viewModelScope.launch(Dispatchers.Main) {
+            val curRow = gamePlay.getCurrentRow()
+            updateGameResults()
+            state = state.copy(waveRow = curRow, waveIndex = 0, msgId = victoryMsg[curRow])
+        }
     }
 
     private fun handleLoss() {
-        updateGameResults()
-        state = state.copy(
-            msgId = R.string.bummer,
-            msg = gamePlay.getCurrentWord(),
-            msgDuration = SnackbarDuration.Indefinite,
-            showResults = true,
-        )
+        viewModelScope.launch(Dispatchers.Main) {
+            updateGameResults()
+            state = state.copy(
+                msgId = R.string.bummer,
+                msg = gamePlay.getCurrentWord(),
+                msgDuration = SnackbarDuration.Indefinite,
+                showResults = true,
+            )
+        }
     }
 
     private fun handleInvalidWord(gameplayState: GameplayState) {
@@ -180,11 +182,9 @@ class GameViewModel(
         }
     }
 
-    private fun updateGameResults() {
-        viewModelScope.launch(Dispatchers.Main) {
-            saveGameResults()
-            getCurrentGameResults()
-        }
+    private suspend fun updateGameResults() {
+        saveGameResults()
+        getCurrentGameResults()
     }
 
     private suspend fun saveGameResults() {
@@ -192,7 +192,6 @@ class GameViewModel(
     }
 
     private suspend fun getCurrentGameResults() {
-        gameResults = gameResultsRepo.getGameResults()
-        state = state.copy(resultsUpdated = true)
+        state = state.copy(resultsUpdated = true, gameResults = gameResultsRepo.getGameResults())
     }
 }

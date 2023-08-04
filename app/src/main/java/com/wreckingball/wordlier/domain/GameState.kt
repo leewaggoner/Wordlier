@@ -18,4 +18,5 @@ data class GameState(
     val usedLetters: List<GameLetter> = listOf(),
     val showResults: Boolean = false,
     val resultsUpdated: Boolean = false,
+    val gameResults: GameResults? = null,
 )

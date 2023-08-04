@@ -58,12 +58,10 @@ fun Game(
         scaffoldState = resultsState,
         sheetPeekHeight = 32.dp,
         sheetContent = {
-            if (viewModel.state.resultsUpdated) {
-                viewModel.gameResults?.let { results ->
-                    ResultsContent(
-                        gameResults = results,
-                    )
-                }
+            viewModel.state.gameResults?.let { results ->
+                ResultsContent(
+                    gameResults = results,
+                )
             }
         }
     ) {
