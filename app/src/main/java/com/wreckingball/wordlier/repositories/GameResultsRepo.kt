@@ -92,10 +92,6 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
         }
     }
 
-    private fun dateIsYesterday(date: Date) : Boolean {
-        return DateUtils.isToday(date.time + DateUtils.DAY_IN_MILLIS)
-    }
-
     private suspend fun updateStreakData(streak: Int) {
         val currentDateString = sdf.format(Date())
         dataStore.putLastDatePlayed(currentDateString)

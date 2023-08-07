@@ -1,7 +1,6 @@
 package com.wreckingball.wordlier.di
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -70,10 +69,6 @@ val appModule = module {
 }
 
 inline fun <reified T> createService(retrofit: Retrofit) : T = retrofit.create(T::class.java)
-
-private fun getSharedPrefs(context: Context) : SharedPreferences {
-    return context.getSharedPreferences(DATA_STORE_NAME, Context.MODE_PRIVATE)
-}
 
 private fun getDataStore(context: Context) : DataStore<Preferences> =
     PreferenceDataStoreFactory.create(

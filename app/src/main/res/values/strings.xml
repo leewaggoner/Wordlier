@@ -7,12 +7,12 @@
     <string name="player_name_error">Please enter your name.</string>
     <string name="invalidWord">Not in word list.</string>
     <string name="invalidLength">Not enough letters.</string>
-    <string name="amazing">Amazing!</string>
-    <string name="incredible">Incredible!</string>
-    <string name="fantastic">Fantastic!</string>
+    <string name="genius">Genius!</string>
+    <string name="magnificent">Magnificent!</string>
+    <string name="impressive">Impressive!</string>
     <string name="splendid">Splendid!</string>
     <string name="great">Great!</string>
-    <string name="whew">Whew!</string>
+    <string name="phew">Phew!</string>
     <string name="bummer">Bummer! Try again tomorrow.</string>
     <string name="statistics">STATISTICS</string>
     <string name="played">Played</string>

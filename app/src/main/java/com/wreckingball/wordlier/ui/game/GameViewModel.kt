@@ -27,12 +27,12 @@ class GameViewModel(
     private var gameResult: GameResult = GameResult.DoNothing
     private var curGuess: List<GameLetter>? = null
     private var victoryMsg = listOf(
-        R.string.amazing,
-        R.string.incredible,
-        R.string.fantastic,
+        R.string.genius,
+        R.string.magnificent,
+        R.string.impressive,
         R.string.splendid,
         R.string.great,
-        R.string.whew,
+        R.string.phew,
     )
 
     init {
