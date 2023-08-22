@@ -47,7 +47,6 @@ fun GuessDistribution(
                 .background(barColor),
             contentAlignment = Alignment.CenterEnd,
         ) {
-            val scope = this
             Text(
                 modifier = Modifier
                     .wrapContentWidth(unbounded = true, align = Alignment.Start)
