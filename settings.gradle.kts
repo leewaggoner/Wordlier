@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Wordlier"
-include ':app'
+include(":app")
