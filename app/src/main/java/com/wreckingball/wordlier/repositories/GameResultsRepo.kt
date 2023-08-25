@@ -1,9 +1,9 @@
 package com.wreckingball.wordlier.repositories
 
-import android.text.format.DateUtils
 import com.wreckingball.wordlier.domain.GameResults
+import com.wreckingball.wordlier.domain.StreakStatus
 import com.wreckingball.wordlier.utils.DataStoreWrapper
-import com.wreckingball.wordlier.utils.isYesterday
+import com.wreckingball.wordlier.utils.dateStreakResult
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -12,10 +12,12 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
     private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     suspend fun updateGameResults(won: Boolean, curRound: Int) {
-        when (dateStreakIsBroken()) {
-            BrokenStreak.UNBROKEN -> handleUnbrokenStreak(won)
-            BrokenStreak.BROKEN -> handleBrokenStreak(won)
-            BrokenStreak.FIRST_GAME -> handleFirstGame(won)
+        val lastDatePlayedString = dataStore.getLastDatePlayed("")
+
+        when (lastDatePlayedString.dateStreakResult()) {
+            StreakStatus.UNBROKEN -> handleUnbrokenStreak(won)
+            StreakStatus.BROKEN -> handleBrokenStreak(won)
+            StreakStatus.FIRST_GAME -> handleFirstGame(won)
         }
         updateWin(won, curRound)
     }
@@ -58,37 +60,6 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
             //player lost, the streak hasn't started yet
             dataStore.putMaxStreak(0)
             updateStreakData(0)
-        }
-    }
-
-    private suspend fun dateStreakIsBroken() : BrokenStreak {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-        val lastDatePlayedString = dataStore.getLastDatePlayed("")
-
-        return if (lastDatePlayedString.isNotEmpty()) {
-            val lastDatePlayed = sdf.parse(lastDatePlayedString)
-            if (lastDatePlayed != null) {
-                // if the date last played is today, do nothing
-                if (!DateUtils.isToday(lastDatePlayed.time)) {
-                    if (lastDatePlayed.isYesterday()) {
-                        // last game played was yesterday, the streak continues!
-                        BrokenStreak.UNBROKEN
-                    } else {
-                        // last game played was NOT yesterday, the streak is broken
-                        BrokenStreak.BROKEN
-                    }
-                } else {
-                    // last game played was today -- return not broken for testing purposes
-                    BrokenStreak.UNBROKEN
-                }
-            } else {
-                // invalid date
-                BrokenStreak.BROKEN
-            }
-        } else {
-            // empty date string, probably the first game ever played
-            BrokenStreak.FIRST_GAME
         }
     }
 
@@ -146,13 +117,5 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
 
     suspend fun clearAll() {
         dataStore.clearAll()
-    }
-
-    companion object {
-        enum class BrokenStreak {
-            BROKEN,
-            UNBROKEN,
-            FIRST_GAME
-        }
     }
 }
