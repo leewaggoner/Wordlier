@@ -19,8 +19,18 @@ data class Dimensions(
     val LetterHorizontalPadding: Dp = 8.dp,
     val GuessRowPaddingDims: Dp = 8.dp,
     val GameBoardPadding: Dp = 32.dp,
+    val ButtonWidth: Dp = 140.dp,
+    val ButtonHeight: Dp = 40.dp,
+    val IntroPadding: Dp = 32.dp,
+    val IntroIconSize: Dp = 60.dp,
 
     val EnterTextSize: TextUnit = 11.sp,
     val KeyboardTextSize: TextUnit = 22.sp,
     val GuessTextSize: TextUnit = 36.sp,
+    val IntroTitleSize: TextUnit = 30.sp,
+    val IntroDescriptionSize: TextUnit = 24.sp,
+    val IntroNormalTextSize: TextUnit = 18.sp,
+
+    val NormalSpace: Dp = 8.dp,
+    val IntroBigSpace: Dp = 48.dp,
 )

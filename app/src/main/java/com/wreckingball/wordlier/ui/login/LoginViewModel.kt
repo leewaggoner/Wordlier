@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wreckingball.wordlier.models.PlayerData
 import com.wreckingball.wordlier.repositories.PlayerRepo
+import com.wreckingball.wordlier.ui.login.model.LoginNavigation
 import com.wreckingball.wordlier.ui.login.model.LoginState
 import com.wreckingball.wordlier.utils.OneShotEvent
 import com.wreckingball.wordlier.utils.toEvent
@@ -40,7 +41,7 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     fun setPlayerData(){
         viewModelScope.launch(Dispatchers.Main) {
             playerRepo.setPlayerName(PlayerData(state.name))
-            navigation.emit(LoginNavigation.GoToHome.toEvent())
+            navigation.emit(LoginNavigation.GoToGame.toEvent())
         }
     }
 }

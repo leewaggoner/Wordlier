@@ -50,6 +50,6 @@ fun StatsBoxPreview() {
 
     StatsBox(
         statNumber = results.currentStreak,
-        statName = stringResource(id = R.string.currentStreak)
+        statName = stringResource(id = R.string.current_streak)
     )
 }

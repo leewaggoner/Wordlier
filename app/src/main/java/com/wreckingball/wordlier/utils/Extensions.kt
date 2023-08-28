@@ -9,10 +9,8 @@ import java.util.Locale
 fun Date.isYesterday() = DateUtils.isToday(time + DateUtils.DAY_IN_MILLIS)
 
 fun String.dateStreakResult() : StreakStatus {
-    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
     return if (isNotEmpty()) {
-        val lastDatePlayed = sdf.parse(this)
+        val lastDatePlayed = this.wordlierDateFromString()
         if (lastDatePlayed != null) {
             // if the date last played is today, do nothing
             if (!DateUtils.isToday(lastDatePlayed.time)) {
@@ -35,5 +33,20 @@ fun String.dateStreakResult() : StreakStatus {
         // empty date string, probably the first game ever played
         StreakStatus.FIRST_GAME
     }
+}
+
+fun Date.wordlierDateToString() : String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return sdf.format(this)
+}
+
+fun String.wordlierDateFromString() : Date? {
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return sdf.parse(this)
+}
+
+fun Date.introDateToString() : String {
+    val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+    return sdf.format(this)
 }
 

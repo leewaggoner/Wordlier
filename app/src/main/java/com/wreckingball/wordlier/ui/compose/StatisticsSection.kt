@@ -47,11 +47,11 @@ fun StatisticsSection(
             )
             StatsBox(
                 statNumber = gameResults.currentStreak,
-                statName = stringResource(id = R.string.currentStreak)
+                statName = stringResource(id = R.string.current_streak)
             )
             StatsBox(
                 statNumber = gameResults.maxStreak,
-                statName = stringResource(id = R.string.maxStreak)
+                statName = stringResource(id = R.string.max_streak)
             )
         }
     }

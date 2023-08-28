@@ -25,7 +25,7 @@ fun GuessDistributionSection(
         Text(
             modifier = Modifier
                 .padding(bottom = 8.dp),
-            text = stringResource(id = R.string.guessDistribution),
+            text = stringResource(id = R.string.guess_distribution),
             style = MaterialTheme.typography.titleSmall,
         )
         gameResults.winsPerRound.forEachIndexed { index, i ->

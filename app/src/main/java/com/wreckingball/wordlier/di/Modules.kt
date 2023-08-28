@@ -16,6 +16,7 @@ import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.repositories.GameResultsRepo
 import com.wreckingball.wordlier.repositories.PlayerRepo
 import com.wreckingball.wordlier.ui.game.GameViewModel
+import com.wreckingball.wordlier.ui.intro.IntroViewModel
 import com.wreckingball.wordlier.ui.login.LoginViewModel
 import com.wreckingball.wordlier.utils.DataStoreWrapper
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,7 @@ private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 30L
 
 val appModule = module {
+    viewModel { IntroViewModel() }
     viewModel { LoginViewModel(playerRepo = get()) }
     viewModel {
         GameViewModel(

@@ -17,7 +17,11 @@
     <string name="statistics">STATISTICS</string>
     <string name="played">Played</string>
     <string name="winPercent">Win %</string>
-    <string name="currentStreak">Current Streak</string>
-    <string name="maxStreak">Max Streak</string>
-    <string name="guessDistribution">GUESS DISTRIBUTION</string>
+    <string name="current_streak">Current Streak</string>
+    <string name="max_streak">Max Streak</string>
+    <string name="guess_distribution">GUESS DISTRIBUTION</string>
+    <string name="game_description">Get 6 chances to guess a 5-letter word.</string>
+    <string name="play">Play</string>
+    <string name="login">Log in</string>
+    <string name="how_to_play">How to play</string>
 </resources>

@@ -4,13 +4,10 @@ import com.wreckingball.wordlier.domain.GameResults
 import com.wreckingball.wordlier.domain.StreakStatus
 import com.wreckingball.wordlier.utils.DataStoreWrapper
 import com.wreckingball.wordlier.utils.dateStreakResult
-import java.text.SimpleDateFormat
+import com.wreckingball.wordlier.utils.wordlierDateToString
 import java.util.Date
-import java.util.Locale
 
 class GameResultsRepo(private val dataStore: DataStoreWrapper) {
-    private val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
     suspend fun updateGameResults(won: Boolean, curRound: Int) {
         val lastDatePlayedString = dataStore.getLastDatePlayed("")
 
@@ -64,7 +61,7 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
     }
 
     private suspend fun updateStreakData(streak: Int) {
-        val currentDateString = sdf.format(Date())
+        val currentDateString = Date().wordlierDateToString()
         dataStore.putLastDatePlayed(currentDateString)
         dataStore.putStreak(streak)
 
