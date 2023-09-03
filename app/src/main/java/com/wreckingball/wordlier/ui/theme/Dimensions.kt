@@ -23,6 +23,7 @@ data class Dimensions(
     val ButtonHeight: Dp = 40.dp,
     val IntroPadding: Dp = 32.dp,
     val IntroIconSize: Dp = 60.dp,
+    val ExampleHeight: Dp = 40.dp,
 
     val EnterTextSize: TextUnit = 11.sp,
     val KeyboardTextSize: TextUnit = 22.sp,
@@ -32,5 +33,6 @@ data class Dimensions(
     val IntroNormalTextSize: TextUnit = 18.sp,
 
     val NormalSpace: Dp = 8.dp,
+    val BiggerSpace: Dp = 16.dp,
     val IntroBigSpace: Dp = 48.dp,
 )

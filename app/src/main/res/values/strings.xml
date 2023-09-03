@@ -24,4 +24,16 @@
     <string name="play">Play</string>
     <string name="login">Log in</string>
     <string name="how_to_play">How to play</string>
+    <string name="instructions">Guess the word in 6 tries.</string>
+    <string name="examples">Examples</string>
+    <string name="bullet1">Each guess must be a valid 5-letter word.</string>
+    <string name="bullet2">The color of  the tiles will change to show how close your guess was to the word.</string>
+    <string name="example">Example</string>
+    <string name="w">W</string>
+    <string name="correct_spot">is in the word and in the correct spot.</string>
+    <string name="i">I</string>
+    <string name="wrong_spot">is in the word but in the wrong spot.</string>
+    <string name="u">U</string>
+    <string name="not_in_word">is not in the word at any spot.</string>
+    <string name="new_puzzle">A new puzzle is released daily at midnight.</string>
 </resources>
