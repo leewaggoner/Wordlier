@@ -30,7 +30,11 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     private fun loadName() {
         viewModelScope.launch(Dispatchers.Main) {
             val name = playerRepo.getPlayerName()
-            state = state.copy(name = name, buttonEnabled = name.isNotEmpty())
+            state = state.copy(
+                name = name,
+                buttonEnabled = name.isNotEmpty(),
+                accountCreated = name.isNotEmpty()
+            )
         }
     }
 
@@ -38,9 +42,15 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
         state = state.copy(name = newName, buttonEnabled = newName.isNotEmpty())
     }
 
-    fun setPlayerData(){
+    fun createAccountAndPlay() {
         viewModelScope.launch(Dispatchers.Main) {
             playerRepo.setPlayerName(PlayerData(state.name))
+            navigation.emit(LoginNavigation.GoToGame.toEvent())
+        }
+    }
+
+    fun loginAndPlay() {
+        viewModelScope.launch(Dispatchers.Main) {
             navigation.emit(LoginNavigation.GoToGame.toEvent())
         }
     }

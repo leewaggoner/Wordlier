@@ -3,9 +3,9 @@ package com.wreckingball.wordlier.ui.login
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -19,8 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingball.wordlier.Actions
 import com.wreckingball.wordlier.R
+import com.wreckingball.wordlier.ui.compose.WordlierButton
 import com.wreckingball.wordlier.ui.login.model.LoginNavigation
 import com.wreckingball.wordlier.ui.login.model.LoginState
+import com.wreckingball.wordlier.ui.theme.dimensions
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -42,7 +44,8 @@ fun Login(
     LoginContent(
         screenState = viewModel.state,
         onNameChange = viewModel::onNameChange,
-        setPlayerName = viewModel::setPlayerData,
+        loginAndPlay = viewModel::loginAndPlay,
+        createAccountAndPlay = viewModel::createAccountAndPlay,
     )
 }
 
@@ -50,7 +53,8 @@ fun Login(
 fun LoginContent(
     screenState: LoginState,
     onNameChange: (String) -> Unit,
-    setPlayerName: () -> Unit,
+    loginAndPlay: () -> Unit,
+    createAccountAndPlay: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -64,7 +68,8 @@ fun LoginContent(
         LoginFields(
             screenState = screenState,
             onNameChange = onNameChange,
-            saveDataAndProceed = setPlayerName
+            loginAndPlay = loginAndPlay,
+            createAccountAndPlay = createAccountAndPlay,
         )
     }
 }
@@ -73,7 +78,8 @@ fun LoginContent(
 private fun LoginFields(
     screenState: LoginState,
     onNameChange: (String) -> Unit,
-    saveDataAndProceed: () ->Unit
+    loginAndPlay: () ->Unit,
+    createAccountAndPlay: () -> Unit,
 ) {
     OutlinedTextField(
         value = screenState.name,
@@ -86,17 +92,26 @@ private fun LoginFields(
         ),
         keyboardActions = KeyboardActions(
             onGo = {
-                saveDataAndProceed()
+                loginAndPlay()
             }
         ),
         onValueChange = onNameChange,
     )
-    Button(
-        enabled = screenState.buttonEnabled,
-        onClick = saveDataAndProceed,
-    ) {
-        Text(text = stringResource(id = R.string.start_button_text),
-            style = MaterialTheme.typography.labelLarge
+    if (screenState.accountCreated) {
+        WordlierButton(
+            modifier = Modifier
+                .padding(top = MaterialTheme.dimensions.NormalSpace),
+            text = stringResource(id = R.string.login),
+            action = loginAndPlay,
+            enabled = screenState.buttonEnabled,
+        )
+    } else {
+        WordlierButton(
+            modifier = Modifier
+                .padding(top = MaterialTheme.dimensions.NormalSpace),
+            text = stringResource(id = R.string.create_account),
+            action = createAccountAndPlay,
+            enabled = screenState.buttonEnabled,
         )
     }
 }
@@ -104,11 +119,16 @@ private fun LoginFields(
 @Preview(name = "Login Content")
 @Composable
 fun LoginContentPreview() {
-    val screenState = LoginState(name = "Lee", buttonEnabled = true)
+    val screenState = LoginState(
+        name = "Lee",
+        buttonEnabled = true,
+        accountCreated = false
+    )
     LoginContent(
         screenState = screenState,
         { },
-        { }
+        { },
+        { },
     )
 }
 

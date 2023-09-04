@@ -19,7 +19,7 @@ data class Dimensions(
     val LetterHorizontalPadding: Dp = 8.dp,
     val GuessRowPaddingDims: Dp = 8.dp,
     val GameBoardPadding: Dp = 32.dp,
-    val ButtonWidth: Dp = 140.dp,
+    val ButtonWidth: Dp = 160.dp,
     val ButtonHeight: Dp = 40.dp,
     val IntroPadding: Dp = 32.dp,
     val IntroIconSize: Dp = 60.dp,

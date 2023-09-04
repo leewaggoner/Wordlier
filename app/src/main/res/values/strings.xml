@@ -36,4 +36,5 @@
     <string name="u">U</string>
     <string name="not_in_word">is not in the word at any spot.</string>
     <string name="new_puzzle">A new puzzle is released daily at midnight.</string>
+    <string name="create_account">Create account</string>
 </resources>

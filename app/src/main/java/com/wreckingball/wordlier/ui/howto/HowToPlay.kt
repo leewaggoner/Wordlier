@@ -14,6 +14,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.wreckingball.wordlier.R
+import com.wreckingball.wordlier.ui.compose.HowToDesc
+import com.wreckingball.wordlier.ui.compose.HowToExamples
 import com.wreckingball.wordlier.ui.theme.dimensions
 import org.koin.androidx.compose.getViewModel
 

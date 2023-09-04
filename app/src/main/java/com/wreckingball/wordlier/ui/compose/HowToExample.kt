@@ -1,4 +1,4 @@
-package com.wreckingball.wordlier.ui.howto
+package com.wreckingball.wordlier.ui.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

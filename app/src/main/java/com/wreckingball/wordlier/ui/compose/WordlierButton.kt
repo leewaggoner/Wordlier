@@ -19,6 +19,7 @@ fun WordlierButton(
     text: String,
     action: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Column(
         modifier = modifier.then(Modifier
@@ -32,7 +33,8 @@ fun WordlierButton(
                     width = MaterialTheme.dimensions.ButtonWidth,
                     height = MaterialTheme.dimensions.ButtonHeight,
                 ),
-            onClick = { action() }
+            onClick = { action() },
+            enabled = enabled,
         ) {
             Text(text = text)
         }
@@ -44,6 +46,6 @@ fun WordlierButton(
 fun WordlierButtonPreview() {
     WordlierButton(
         text = stringResource(id = R.string.how_to_play),
-        action = { }
+        action = { },
     )
 }
