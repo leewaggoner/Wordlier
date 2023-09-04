@@ -44,11 +44,14 @@ import org.koin.androidx.compose.getViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Game(
-    viewModel: GameViewModel = getViewModel()
+    isPuzzleReady: Boolean,
+    viewModel: GameViewModel = getViewModel(),
 ) {
     val resultsState =  rememberBottomSheetScaffoldState()
 
-    if (viewModel.state.showResults) {
+    viewModel.isPuzzleReady = isPuzzleReady
+
+    if (!isPuzzleReady || viewModel.state.showResults) {
         LaunchedEffect(key1 = Unit) {
             resultsState.bottomSheetState.expand()
         }
@@ -74,9 +77,7 @@ fun Game(
         )
 
         if (viewModel.state.msgId > 0) {
-            val msg = if (viewModel.state.msg.isNotEmpty()) {
-                viewModel.state.msg
-            } else {
+            val msg = viewModel.state.msg.ifEmpty {
                 stringResource(id = viewModel.state.msgId)
             }
             LaunchedEffect(key1 = Unit) {

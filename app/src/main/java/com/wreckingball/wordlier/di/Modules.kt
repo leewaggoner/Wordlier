@@ -19,6 +19,7 @@ import com.wreckingball.wordlier.ui.game.GameViewModel
 import com.wreckingball.wordlier.ui.howto.HowToViewModel
 import com.wreckingball.wordlier.ui.intro.IntroViewModel
 import com.wreckingball.wordlier.ui.login.LoginViewModel
+import com.wreckingball.wordlier.ui.play.PlayViewModel
 import com.wreckingball.wordlier.utils.DataStoreWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +42,7 @@ val appModule = module {
     viewModel { IntroViewModel() }
     viewModel { HowToViewModel() }
     viewModel { LoginViewModel(playerRepo = get()) }
+    viewModel { PlayViewModel(playerRepo = get()) }
     viewModel {
         GameViewModel(
             gamePlay = get(),
@@ -49,7 +51,12 @@ val appModule = module {
     }
 
     factory { PlayerRepo(dataStore = get()) }
-    factory { GameRepo(wordValidationService = get()) }
+    factory {
+        GameRepo(
+            wordValidationService = get(),
+            dataStore = get()
+        )
+    }
     factory { GameResultsRepo(dataStore = get()) }
     factory { GameRules() }
     single {

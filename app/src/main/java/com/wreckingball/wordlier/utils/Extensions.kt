@@ -41,8 +41,12 @@ fun Date.wordlierDateToString() : String {
 }
 
 fun String.wordlierDateFromString() : Date? {
-    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    return sdf.parse(this)
+    return if (this.isEmpty()) {
+        null
+    } else {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        sdf.parse(this)
+    }
 }
 
 fun Date.introDateToString() : String {

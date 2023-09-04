@@ -6,6 +6,7 @@ object Destinations {
     const val Intro = "intro"
     const val HowToPlay = "howToPlay"
     const val Login = "login"
+    const val Play = "play"
     const val Game = "game"
 }
 

@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     val navigation = MutableSharedFlow<OneShotEvent<LoginNavigation>?>(
@@ -28,13 +29,15 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     }
 
     private fun loadName() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.IO) {
             val name = playerRepo.getPlayerName()
-            state = state.copy(
-                name = name,
-                buttonEnabled = name.isNotEmpty(),
-                accountCreated = name.isNotEmpty()
-            )
+            withContext(Dispatchers.Main) {
+                state = state.copy(
+                    name = name,
+                    buttonEnabled = name.isNotEmpty(),
+                    accountCreated = name.isNotEmpty()
+                )
+            }
         }
     }
 
@@ -43,7 +46,7 @@ class LoginViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     }
 
     fun createAccountAndPlay() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.IO) {
             playerRepo.setPlayerName(PlayerData(state.name))
             navigation.emit(LoginNavigation.GoToGame.toEvent())
         }

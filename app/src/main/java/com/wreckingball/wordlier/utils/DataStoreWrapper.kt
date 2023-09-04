@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.first
 
 private const val REPO_NAME = "com.wreckingball.wordlier"
 
-class DataStoreWrapper(dataStore: DataStore<Preferences>) {
-    private val store = dataStore
-
+class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
     private object PreferencesKey {
         val PLAYER_NAME_KEY = stringPreferencesKey("PlayerName")
         val LAST_DATE_PLAYED = stringPreferencesKey("LastDatePlayed")
@@ -33,7 +31,7 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun getPlayerName(default: String) : String {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -43,13 +41,13 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun putPlayerName(name: String) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferencesKey.PLAYER_NAME_KEY] = name
         }
     }
 
     suspend fun getLastDatePlayed(default: String) : String {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -59,13 +57,13 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun putLastDatePlayed(lastDatePlayed: String) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferencesKey.LAST_DATE_PLAYED] = lastDatePlayed
         }
     }
 
     suspend fun getStreak(default: Int) : Int {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -75,7 +73,7 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun putStreak(streak: Int) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferencesKey.STREAK] = streak
         }
     }
@@ -100,7 +98,7 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     private suspend fun getRoundWinsData(round: Preferences.Key<Int>, default: Int) : Int {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -122,13 +120,13 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     private suspend fun putRoundWinData(round: Preferences.Key<Int>, wins: Int) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[round] = wins
         }
     }
 
     suspend fun getTotalWins(default: Int) : Int {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -138,13 +136,13 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun putTotalWins(wins: Int) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferencesKey.TOTAL_WINS] = wins
         }
     }
 
     suspend fun getTotalLosses(default: Int) : Int {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -154,13 +152,13 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun putTotalLosses(losses: Int) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferencesKey.TOTAL_LOSSES] = losses
         }
     }
 
     suspend fun getMaxStreak(default: Int) : Int {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -170,13 +168,13 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun putMaxStreak(maxStreak: Int) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferencesKey.MAX_STREAK] = maxStreak
         }
     }
 
     suspend fun getLastRoundWon(default: Int) : Int {
-        return store.data.catch { exception ->
+        return dataStore.data.catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
@@ -186,13 +184,13 @@ class DataStoreWrapper(dataStore: DataStore<Preferences>) {
     }
 
     suspend fun putLastRoundWon(round: Int) {
-        store.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[PreferencesKey.LAST_ROUND_WON] = round
         }
     }
 
     suspend fun clearAll() {
-        store.edit {
+        dataStore.edit {
             it.clear()
         }
     }

@@ -2,13 +2,19 @@ package com.wreckingball.wordlier.repositories
 
 import com.wreckingball.wordlier.network.NetworkResponse
 import com.wreckingball.wordlier.network.WordValidationService
+import com.wreckingball.wordlier.utils.DataStoreWrapper
+import com.wreckingball.wordlier.utils.isYesterday
+import com.wreckingball.wordlier.utils.wordlierDateFromString
 import com.wreckingball.wordlier.utils.wordlierDateToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.util.Date
 
-class GameRepo(private val wordValidationService: WordValidationService) {
+class GameRepo(
+    private val wordValidationService: WordValidationService,
+    private val dataStore: DataStoreWrapper
+) {
     private val words = mutableMapOf<String, String>()
     fun initWords() {
         words["2023-08-28"] = "FAULT"
@@ -30,6 +36,12 @@ class GameRepo(private val wordValidationService: WordValidationService) {
         words["2023-09-13"] = "DEPTH"
         words["2023-09-14"] = "TAINT"
         words["2023-09-15"] = "LLAMA"
+    }
+
+    suspend fun isNewPuzzleReady() : Boolean {
+        //if the last date played was yesterday, a new puzzle is ready
+        val lastDatePlayed = dataStore.getLastDatePlayed("").wordlierDateFromString()
+        return lastDatePlayed == null || lastDatePlayed.isYesterday()
     }
 
     fun getDailyWord() : String {
