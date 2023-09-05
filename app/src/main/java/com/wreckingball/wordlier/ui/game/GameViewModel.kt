@@ -18,7 +18,6 @@ import com.wreckingball.wordlier.domain.MAX_WORD_LENGTH
 import com.wreckingball.wordlier.repositories.GameResultsRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class GameViewModel(
     private val gamePlay: GamePlay,
@@ -42,14 +41,14 @@ class GameViewModel(
         gamePlay.registerInvalidWordUICallback { state ->
             handleInvalidWord(state)
         }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
 //            gameResultsRepo.clearAll()
             getCurrentGameResults()
         }
     }
 
     private fun handleWin() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             val curRow = gamePlay.getCurrentRow()
             updateGameResults()
             state = state.copy(waveRow = curRow, waveIndex = 0, msgId = victoryMsg[curRow])
@@ -57,7 +56,7 @@ class GameViewModel(
     }
 
     private fun handleLoss() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             updateGameResults()
             state = state.copy(
                 msgId = R.string.bummer,
@@ -203,8 +202,6 @@ class GameViewModel(
 
     private suspend fun getCurrentGameResults() {
         val gameResults = gameResultsRepo.getGameResults()
-        withContext(Dispatchers.Main) {
-            state = state.copy(resultsUpdated = true, gameResults = gameResults)
-        }
+        state = state.copy(resultsUpdated = true, gameResults = gameResults)
     }
 }

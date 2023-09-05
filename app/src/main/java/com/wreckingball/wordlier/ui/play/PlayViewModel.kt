@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class PlayViewModel(private val playerRepo: PlayerRepo) : ViewModel() {
     lateinit var userName: String
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             userName = playerRepo.getPlayerName()
         }
     }

@@ -19,14 +19,19 @@ fun WordlierApp(
     val navController = rememberNavController()
     val actions = remember(navController) { Actions(navController) }
 
-    var startDestination = Destinations.Intro
-    if (isLoggedIn) {
-        startDestination = if (isPuzzleReady) {
+    var startDestination = if (isPuzzleReady) {
+        if (isLoggedIn) {
+            //new puzzle is ready and the user is logged in -- show the Play screen
             Destinations.Play
         } else {
-            Destinations.Game
+            //puzzle is not ready and the user is not logged in -- show the Intro screen
+            Destinations.Intro
         }
+    } else {
+        //puzzle is not ready -- go to the Game screen and show the player's stats
+        Destinations.Game
     }
+
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Destinations.Intro) {
             Intro(actions = actions)

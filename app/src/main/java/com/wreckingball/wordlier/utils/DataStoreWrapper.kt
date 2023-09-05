@@ -78,10 +78,10 @@ class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    suspend fun getAllRoundWins(default: Int) : List<Int> {
+    suspend fun getAllRoundWins() : List<Int> {
         val result = mutableListOf<Int>()
         for (i in 0 until MAX_GUESSES) {
-            result.add(getRoundWins(i, default))
+            result.add(getRoundWins(i, 0))
         }
         return result
     }

@@ -5,18 +5,22 @@ import com.wreckingball.wordlier.domain.StreakStatus
 import com.wreckingball.wordlier.utils.DataStoreWrapper
 import com.wreckingball.wordlier.utils.dateStreakResult
 import com.wreckingball.wordlier.utils.wordlierDateToString
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.Date
 
 class GameResultsRepo(private val dataStore: DataStoreWrapper) {
     suspend fun updateGameResults(won: Boolean, curRound: Int) {
-        val lastDatePlayedString = dataStore.getLastDatePlayed("")
+        withContext(Dispatchers.IO) {
+            val lastDatePlayedString = dataStore.getLastDatePlayed("")
 
-        when (lastDatePlayedString.dateStreakResult()) {
-            StreakStatus.UNBROKEN -> handleUnbrokenStreak(won)
-            StreakStatus.BROKEN -> handleBrokenStreak(won)
-            StreakStatus.FIRST_GAME -> handleFirstGame(won)
+            when (lastDatePlayedString.dateStreakResult()) {
+                StreakStatus.UNBROKEN -> handleUnbrokenStreak(won)
+                StreakStatus.BROKEN -> handleBrokenStreak(won)
+                StreakStatus.FIRST_GAME -> handleFirstGame(won)
+            }
+            updateWin(won, curRound)
         }
-        updateWin(won, curRound)
     }
 
     private suspend fun handleUnbrokenStreak(won: Boolean) {
@@ -86,33 +90,35 @@ class GameResultsRepo(private val dataStore: DataStoreWrapper) {
         }
     }
 
-    suspend fun getGameResults() : GameResults {
-        val winsPerRound = dataStore.getAllRoundWins(0)
-        val totalWins = dataStore.getTotalWins(0)
-        val totalLosses = dataStore.getTotalLosses(0)
-        val gamesPlayed = totalWins + totalLosses
-        val winPercentRaw = if (gamesPlayed == 0) {
-            0f
-        } else if (totalLosses == 0) {
-            1f
-        } else {
-            totalWins.toFloat() / gamesPlayed.toFloat()
+    suspend fun getGameResults(): GameResults {
+        return withContext(Dispatchers.IO) {
+            val winsPerRound = dataStore.getAllRoundWins()
+            val totalWins = dataStore.getTotalWins(0)
+            val totalLosses = dataStore.getTotalLosses(0)
+            val gamesPlayed = totalWins + totalLosses
+            val winPercentRaw = if (gamesPlayed == 0) {
+                0f
+            } else if (totalLosses == 0) {
+                1f
+            } else {
+                totalWins.toFloat() / gamesPlayed.toFloat()
+            }
+            val winPercent = (winPercentRaw * 100).toInt()
+            val currentStreak = dataStore.getStreak(0)
+            val maxStreak = dataStore.getMaxStreak(0)
+            val lastRoundWon = dataStore.getLastRoundWon(-1)
+            GameResults(
+                winsPerRound = winsPerRound,
+                gamesPlayed = gamesPlayed,
+                winPercent = winPercent,
+                currentStreak = currentStreak,
+                maxStreak = maxStreak,
+                lastRoundWon = lastRoundWon,
+            )
         }
-        val winPercent = (winPercentRaw * 100).toInt()
-        val currentStreak = dataStore.getStreak(0)
-        val maxStreak = dataStore.getMaxStreak(0)
-        val lastRoundWon = dataStore.getLastRoundWon(-1)
-        return GameResults(
-            winsPerRound = winsPerRound,
-            gamesPlayed = gamesPlayed,
-            winPercent = winPercent,
-            currentStreak = currentStreak,
-            maxStreak = maxStreak,
-            lastRoundWon = lastRoundWon,
-        )
     }
 
-    suspend fun clearAll() {
+    suspend fun clearAll() = withContext(Dispatchers.IO) {
         dataStore.clearAll()
     }
 }

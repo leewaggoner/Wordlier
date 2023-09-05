@@ -38,25 +38,25 @@ class GameRepo(
         words["2023-09-15"] = "LLAMA"
     }
 
-    suspend fun isNewPuzzleReady() : Boolean {
+    suspend fun isNewPuzzleReady() = withContext(Dispatchers.IO) {
         //if the last date played was yesterday, a new puzzle is ready
         val lastDatePlayed = dataStore.getLastDatePlayed("").wordlierDateFromString()
-        return lastDatePlayed == null || lastDatePlayed.isYesterday()
+        lastDatePlayed == null || lastDatePlayed.isYesterday()
     }
 
     fun getDailyWord() : String {
         return words[Date().wordlierDateToString()] ?: "TRUST"
     }
 
-    suspend fun validateWord(word: String): Boolean {
-        return when (val response = callDictionaryApi(word)) {
+    suspend fun validateWord(word: String) = withContext(Dispatchers.IO) {
+        when (val response = callDictionaryApi(word)) {
             is NetworkResponse.Success -> {
                 response.data[0].word.isNotEmpty()
             }
             is NetworkResponse.Error -> {
                 //return true for anything other than 404-Not Found (invalid word). If the server is
                 //failing the game shouldn't stop
-                return response.code != 404
+                response.code != 404
             }
         }
     }
@@ -72,7 +72,7 @@ class GameRepo(
         }
     }
 
-fun HttpException.toNetworkErrorResponse(): NetworkResponse<Nothing> =
+private fun HttpException.toNetworkErrorResponse(): NetworkResponse<Nothing> =
     when (val code = code()) {
         400 -> NetworkResponse.Error.BadRequest(this, code)
         401,
