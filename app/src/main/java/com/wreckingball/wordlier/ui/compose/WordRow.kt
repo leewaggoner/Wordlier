@@ -44,8 +44,8 @@ fun WordRow(
     ) {
         for ((index, character) in guess.withIndex()) {
             FlippableCharacterCell(
-                letter = character.first.toString(),
-                color = character.second,
+                letter = character.letter.toString(),
+                color = character.color,
                 wave = waveIndex in 0 until MAX_WORD_LENGTH && waveIndex == index,
                 onWaveFinished = onWaveFinished,
                 flip = flipIndex in 0 until MAX_WORD_LENGTH && flipIndex == index,

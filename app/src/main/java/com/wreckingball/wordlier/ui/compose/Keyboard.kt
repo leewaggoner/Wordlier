@@ -117,10 +117,10 @@ private fun  findUsedLetters(keyRow: String, usedLetters: List<GameLetter>) : Ma
 
     //get list of all letters used in row
     val result = usedLetters.filter { letter ->
-        letter.first in keyRow
+        letter.letter in keyRow
     }
         //convert to map with duplicate colors
-        .groupBy({ it.first }, { it.second })
+        .groupBy({ it.letter }, { it.color })
         //filter the duplicate colors so only the best remains
         .mapValues { entry ->
             entry.value.reduce { acc, color ->

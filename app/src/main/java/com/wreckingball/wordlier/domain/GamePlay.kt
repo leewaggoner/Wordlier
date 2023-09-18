@@ -2,11 +2,8 @@ package com.wreckingball.wordlier.domain
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.graphics.Color
 import com.wreckingball.wordlier.repositories.GameRepo
 import com.wreckingball.wordlier.ui.theme.NormalCell
-
-typealias GameLetter = Pair<Char, Color>
 
 const val MAX_WORD_LENGTH = 5
 const val MAX_GUESSES = 6
@@ -48,7 +45,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
     }
 
     suspend fun handleEnter() : GameResult {
-        val guess = board[cursor.getRow()].map { it.first }.joinToString(separator = "").trim()
+        val guess = board[cursor.getRow()].map { it.letter }.joinToString(separator = "").trim()
         if (guess.length == MAX_WORD_LENGTH) {
             return if (isValidWord(guess)) {
                 val coloredWord = gameRules.colorLetters(word, guess)
@@ -79,7 +76,7 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
     fun handleRemoveLetter() {
         //if direction reversed from forward to backward and the last character is empty, we
         //need to back the cursor one extra space
-        cursor.didReverse(Direction.BACKWARD, board[cursor.getRow()][MAX_WORD_LENGTH - 1].first == ' ')
+        cursor.didReverse(Direction.BACKWARD, board[cursor.getRow()][MAX_WORD_LENGTH - 1].letter == ' ')
 
         board[cursor.getRow()][cursor.getColumn()] = GameLetter(' ', NormalCell)
         cursor.back()
@@ -89,9 +86,12 @@ class GamePlay(private val cursor: GameCursor, private val gameRepo: GameRepo, p
         if (!cursor.atEnd) {
             //if direction reversed from backward to forward and the first character is not empty,
             //we need to advance the cursor one extra space
-            cursor.didReverse(Direction.FORWARD, board[cursor.getRow()][0].first != ' ')
+            cursor.didReverse(Direction.FORWARD, board[cursor.getRow()][0].letter != ' ')
 
-            board[cursor.getRow()][cursor.getColumn()] = GameLetter(character.first(), NormalCell)
+            board[cursor.getRow()][cursor.getColumn()] = GameLetter(
+                letter = character.first(),
+                color = NormalCell
+            )
             cursor.advance()
         }
     }

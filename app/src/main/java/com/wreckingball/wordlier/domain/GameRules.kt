@@ -5,7 +5,7 @@ import com.wreckingball.wordlier.ui.theme.WrongLetterCell
 import com.wreckingball.wordlier.ui.theme.WrongPositionCell
 
 class GameRules {
-    fun colorLetters(word: String, guess: String) : List<GameLetter> {
+    fun colorLetters(word: String, guess: String): List<GameLetter> {
         val characterCount = initCharacterCount(word)
         val guessList = guess.toList()
         val resultList = mutableListOf(
@@ -37,7 +37,9 @@ class GameRules {
             }
         }
 
-        return guessList.zip(resultList)
+        val letters = guessList.zip(resultList)
+
+        return letters.map { letter -> GameLetter(letter = letter.first, color = letter.second) }
     }
 
     private fun initCharacterCount(word: String) : MutableMap<Char, Int> {
