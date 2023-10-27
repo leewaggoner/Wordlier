@@ -8,6 +8,12 @@ import java.util.Locale
 
 fun Date.isYesterday() = DateUtils.isToday(time + DateUtils.DAY_IN_MILLIS)
 
+fun Date.isEarlierThanToday(): Boolean {
+    val todayStr = Date().wordlierDateToString()
+    val today = todayStr.wordlierDateFromString()
+    return this.before(today)
+}
+
 fun String.dateStreakResult() : StreakStatus {
     return if (isNotEmpty()) {
         val lastDatePlayed = this.wordlierDateFromString()

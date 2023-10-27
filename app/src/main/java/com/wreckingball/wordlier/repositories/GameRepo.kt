@@ -3,7 +3,7 @@ package com.wreckingball.wordlier.repositories
 import com.wreckingball.wordlier.network.NetworkResponse
 import com.wreckingball.wordlier.network.WordValidationService
 import com.wreckingball.wordlier.utils.DataStoreWrapper
-import com.wreckingball.wordlier.utils.isYesterday
+import com.wreckingball.wordlier.utils.isEarlierThanToday
 import com.wreckingball.wordlier.utils.wordlierDateFromString
 import com.wreckingball.wordlier.utils.wordlierDateToString
 import kotlinx.coroutines.Dispatchers
@@ -17,31 +17,42 @@ class GameRepo(
 ) {
     private val words = mutableMapOf<String, String>()
     fun initWords() {
-        words["2023-08-28"] = "FAULT"
-        words["2023-08-29"] = "ADULT"
-        words["2023-08-30"] = "GRANT"
-        words["2023-08-31"] = "EARTH"
-        words["2023-09-01"] = "CRIME"
-        words["2023-09-02"] = "ROBIN"
-        words["2023-09-03"] = "BIRTH"
-        words["2023-09-04"] = "STALE"
-        words["2023-09-05"] = "ANGER"
-        words["2023-09-06"] = "DERBY"
-        words["2023-09-07"] = "FLANK"
-        words["2023-09-08"] = "GHOST"
-        words["2023-09-09"] = "WINCH"
-        words["2023-09-10"] = "AGENT"
-        words["2023-09-11"] = "BLOCK"
-        words["2023-09-12"] = "CHAIN"
-        words["2023-09-13"] = "DEPTH"
-        words["2023-09-14"] = "TAINT"
-        words["2023-09-15"] = "LLAMA"
+        words["2023-10-26"] = "FAULT"
+        words["2023-10-27"] = "ADULT"
+        words["2023-10-28"] = "GRANT"
+        words["2023-10-29"] = "EARTH"
+        words["2023-10-30"] = "QUACK"
+        words["2023-10-31"] = "JUMPY"
+        words["2023-11-01"] = "CRIME"
+        words["2023-11-02"] = "ROBIN"
+        words["2023-11-03"] = "BIRTH"
+        words["2023-11-04"] = "STALE"
+        words["2023-11-05"] = "ANGER"
+        words["2023-11-06"] = "DERBY"
+        words["2023-11-07"] = "FLANK"
+        words["2023-11-08"] = "GHOST"
+        words["2023-11-09"] = "WINCH"
+        words["2023-11-10"] = "AGENT"
+        words["2023-11-11"] = "BLOCK"
+        words["2023-11-12"] = "CHAIN"
+        words["2023-11-13"] = "DEPTH"
+        words["2023-11-14"] = "TAINT"
+        words["2023-11-15"] = "BUXOM"
+        words["2023-11-16"] = "ZILCH"
+        words["2023-11-17"] = "BOOZY"
+        words["2023-11-18"] = "JIMMY"
+        words["2023-11-19"] = "BACON"
+        words["2023-11-20"] = "CADET"
+        words["2023-11-21"] = "FACET"
+        words["2023-11-22"] = "LAMED"
+        words["2023-11-23"] = "JAZZY"
     }
 
     suspend fun isNewPuzzleReady() = withContext(Dispatchers.IO) {
-        //if the last date played was yesterday, a new puzzle is ready
+        //if the last date played is yesterday or earlier, a new puzzle is ready
         val lastDatePlayed = dataStore.getLastDatePlayed("").wordlierDateFromString()
-        lastDatePlayed == null || lastDatePlayed.isYesterday()
+        //if last date played is null, it's the first game ever played
+        lastDatePlayed == null || lastDatePlayed.isEarlierThanToday()
     }
 
     fun getDailyWord() : String {

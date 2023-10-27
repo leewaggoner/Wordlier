@@ -11,8 +11,6 @@ import com.wreckingball.wordlier.domain.MAX_GUESSES
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 
-private const val REPO_NAME = "com.wreckingball.wordlier"
-
 class DataStoreWrapper(private val dataStore: DataStore<Preferences>) {
     private object PreferencesKey {
         val PLAYER_NAME_KEY = stringPreferencesKey("PlayerName")
